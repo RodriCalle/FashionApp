@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:demo_fashion_app/components/AppBarComponent.dart';
-import 'package:demo_fashion_app/utils/Pair.dart';
-import 'package:demo_fashion_app/views/Home.dart';
+import 'package:demo_fashion_app/views/ClothImagePage.dart';
+import 'package:demo_fashion_app/views/HomePage.dart';
 import 'package:flutter/material.dart';
 
 class ScaffoldComponent extends StatefulWidget {
@@ -19,6 +19,7 @@ class _ScaffoldComponentState
   int _currentIndex = 0;
 
   final List<Widget> _views = [
+    ClothImagePage(),
     HomePage(),
   ];
 
