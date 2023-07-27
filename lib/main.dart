@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fashion App',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: ScaffoldComponent(),
     );
   }
 }
