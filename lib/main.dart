@@ -1,5 +1,6 @@
 
 import 'package:demo_fashion_app/views/LoginPage.dart';
+import 'package:demo_fashion_app/views/SignUpPage.dart';
 import 'package:flutter/material.dart';
 
 import 'components/ScaffoldComponent.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fashion App',
       debugShowCheckedModeBanner: false,
-      home: ScaffoldComponent(),
+      home: SignUpPage(),
     );
   }
 }
