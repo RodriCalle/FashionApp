@@ -1,3 +1,4 @@
+import 'package:demo_fashion_app/classes/Auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -9,8 +10,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>(); // GlobalKey para el formulario
-  String _email = '';
-  String _password = '';
+  Login loginData = new Login();
 
   final OutlineInputBorder border = OutlineInputBorder(
     borderRadius: BorderRadius.circular(30),
@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                             return null;
                           },
                           onSaved: (value) {
-                            _email = value!;
+                            loginData.email = value!;
                           },
                         ),
                       ),
@@ -89,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: bodyWidth * 0.65,
                         height: bodyHeight * 0.12,
                         child: TextFormField(
+                          obscureText: true,
                           cursorColor: Colors.white,
                           style: TextStyle(
                             color: Colors.white,
@@ -113,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                             return null;
                           },
                           onSaved: (value) {
-                            _password = value!;
+                            loginData.password = value!;
                           },
                         ),
                       ),
