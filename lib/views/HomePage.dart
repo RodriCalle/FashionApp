@@ -167,11 +167,11 @@ class _HomePageState extends State<HomePage> {
                           pickImageFromCamera();
                         }),
                   ),
-                  Container(
+                  /*Container(
                     child: image == null
                         ? const Text('No image selected.')
                         : Image.file(image!, width: 200, height: 200),
-                  )
+                  )*/
                 ],
               ),
             ),
