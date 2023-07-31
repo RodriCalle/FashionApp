@@ -1,18 +1,17 @@
 import 'package:demo_fashion_app/components/AppBarComponent.dart';
 import 'package:demo_fashion_app/views/ClothImagePage.dart';
 import 'package:demo_fashion_app/views/HomePage.dart';
+import 'package:demo_fashion_app/views/ProfilePage.dart';
 import 'package:flutter/material.dart';
 
 class ScaffoldComponent extends StatefulWidget {
   const ScaffoldComponent({Key? key}) : super(key: key);
 
   @override
-  _ScaffoldComponentState createState() =>
-      _ScaffoldComponentState();
+  _ScaffoldComponentState createState() => _ScaffoldComponentState();
 }
 
-class _ScaffoldComponentState
-    extends State<ScaffoldComponent> {
+class _ScaffoldComponentState extends State<ScaffoldComponent> {
   int _currentIndex = 0;
   int _subStepIndex = 0;
   late String _appBarTitle = "Seleccionar Prenda";
@@ -114,10 +113,9 @@ class _ScaffoldComponentState
       case 2:
         return ClothImagePage();
       case 3:
-        return ClothImagePage();
+        return const ProfilePage();
       default:
         return Container();
     }
   }
-
 }
