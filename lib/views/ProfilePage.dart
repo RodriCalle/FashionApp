@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
   final File? image;
+  final ValueChanged<int> onSubStepChanged;
 
-  const ProfilePage({super.key, this.image});
+  const ProfilePage({super.key, this.image, required this.onSubStepChanged});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -59,7 +60,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // double bodyHeight = constraints.maxHeight;
         double bodyWidth = constraints.maxWidth;
 
         return SingleChildScrollView(
@@ -104,6 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                       onPressed: () {
                                         setState(() => disabledForm = true);
+                                        widget.onSubStepChanged(1);
                                       }),
                                 ),
                               ),
@@ -230,7 +231,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               return null;
                             },
                             onSaved: (value) {
-                              // profeilData = value!;
+                              profileData.lastName = value!;
                             },
                           ),
                         ],
@@ -273,7 +274,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               return null;
                             },
                             onSaved: (value) {
-                              // profeilData = value!;
+                              profileData.gender = value!;
                             },
                           ),
                         ],
@@ -316,7 +317,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               return null;
                             },
                             onSaved: (value) {
-                              // profeilData = value!;
+                              profileData.email = value!;
                             },
                           ),
                         ],

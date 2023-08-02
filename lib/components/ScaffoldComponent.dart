@@ -1,7 +1,9 @@
 import 'package:demo_fashion_app/components/AppBarComponent.dart';
 import 'package:demo_fashion_app/views/ClothImagePage.dart';
 import 'package:demo_fashion_app/views/HomePage.dart';
+import 'package:demo_fashion_app/views/PaymentSubscriptionPage.dart';
 import 'package:demo_fashion_app/views/ProfilePage.dart';
+import 'package:demo_fashion_app/views/SubscriptionPage.dart';
 import 'package:flutter/material.dart';
 
 class ScaffoldComponent extends StatefulWidget {
@@ -29,6 +31,12 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
     "Genera conjuntos de ropa2",
   ];
 
+  final List<String> _subTitlesProfile = [
+    "Mi perfil",
+    "Plan de suscripción",
+    "Realizar Pago",
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +56,13 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
     setState(() {
       _subStepIndex = index;
       _appBarTitle = _subTitles[_subStepIndex];
+    });
+  }
+
+  void _onSubStepChanged_profile(int index) {
+    setState(() {
+      _subStepIndex = index;
+      _appBarTitle = _subTitlesProfile[_subStepIndex];
     });
   }
 
@@ -113,7 +128,17 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
       case 2:
         return ClothImagePage();
       case 3:
-        return const ProfilePage();
+        return IndexedStack(
+          index: _subStepIndex,
+          children: [
+            ProfilePage(
+              onSubStepChanged: _onSubStepChanged_profile,
+            ),
+            SubscriptionPage(onSubStepChanged: _onSubStepChanged_profile),
+            PaymentSubscriptionPage(
+                onSubStepChanged: _onSubStepChanged_profile),
+          ],
+        );
       default:
         return Container();
     }
