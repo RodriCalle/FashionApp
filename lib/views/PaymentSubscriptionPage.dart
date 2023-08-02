@@ -30,11 +30,30 @@ class _PaymentSubscriptionPageState extends State<PaymentSubscriptionPage> {
     borderSide: const BorderSide(color: Colors.white),
   );
 
+  Future<void> _showConfirmationDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmación'),
+          content: const Text('La transacción se ha completado exitosamente'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        double bodyHeight = constraints.maxHeight;
         double bodyWidth = constraints.maxWidth;
 
         return SingleChildScrollView(
@@ -66,6 +85,7 @@ class _PaymentSubscriptionPageState extends State<PaymentSubscriptionPage> {
                     child: Padding(
                         padding: const EdgeInsets.all(20),
                         child: Form(
+                          key: _formPaymentKey,
                           child: Column(children: [
                             const SizedBox(
                               height: 35,
@@ -305,19 +325,23 @@ class _PaymentSubscriptionPageState extends State<PaymentSubscriptionPage> {
                               height: 45,
                             ),
                             FilledButton(
-                                onPressed: () {
-                                  // widget.onSubStepChanged(2);
-                                },
-                                style: buttonPrimary,
-                                child: const Padding(
-                                  padding: EdgeInsets.all(15),
-                                  child: Text(
-                                    'Pagar S/. 9.90',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
+                              style: buttonPrimary,
+                              child: const Padding(
+                                padding: EdgeInsets.all(15),
+                                child: Text(
+                                  'Pagar S/. 9.90',
+                                  style: TextStyle(
+                                    color: Colors.black,
                                   ),
-                                )),
+                                ),
+                              ),
+                              onPressed: () {
+                                if (_formPaymentKey.currentState!.validate()) {
+                                  _formPaymentKey.currentState!.save();
+                                  _showConfirmationDialog(context);
+                                }
+                              },
+                            ),
                             const SizedBox(height: 30),
                           ]),
                         ))))
