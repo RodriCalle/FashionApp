@@ -1,18 +1,19 @@
 import 'package:demo_fashion_app/components/AppBarComponent.dart';
 import 'package:demo_fashion_app/views/ClothImagePage.dart';
 import 'package:demo_fashion_app/views/HomePage.dart';
+import 'package:demo_fashion_app/views/PaymentSubscriptionPage.dart';
+import 'package:demo_fashion_app/views/ProfilePage.dart';
+import 'package:demo_fashion_app/views/SubscriptionPage.dart';
 import 'package:flutter/material.dart';
 
 class ScaffoldComponent extends StatefulWidget {
   const ScaffoldComponent({Key? key}) : super(key: key);
 
   @override
-  _ScaffoldComponentState createState() =>
-      _ScaffoldComponentState();
+  _ScaffoldComponentState createState() => _ScaffoldComponentState();
 }
 
-class _ScaffoldComponentState
-    extends State<ScaffoldComponent> {
+class _ScaffoldComponentState extends State<ScaffoldComponent> {
   int _currentIndex = 0;
   int _subStepIndex = 0;
   late String _appBarTitle = "Seleccionar Prenda";
@@ -28,6 +29,12 @@ class _ScaffoldComponentState
     "Imagen de la prenda de vestir",
     "Genera conjuntos de ropa1",
     "Genera conjuntos de ropa2",
+  ];
+
+  final List<String> _subTitlesProfile = [
+    "Mi perfil",
+    "Plan de suscripción",
+    "Realizar Pago",
   ];
 
   @override
@@ -49,6 +56,13 @@ class _ScaffoldComponentState
     setState(() {
       _subStepIndex = index;
       _appBarTitle = _subTitles[_subStepIndex];
+    });
+  }
+
+  void _onSubStepChanged_profile(int index) {
+    setState(() {
+      _subStepIndex = index;
+      _appBarTitle = _subTitlesProfile[_subStepIndex];
     });
   }
 
@@ -114,10 +128,19 @@ class _ScaffoldComponentState
       case 2:
         return ClothImagePage();
       case 3:
-        return ClothImagePage();
+        return IndexedStack(
+          index: _subStepIndex,
+          children: [
+            ProfilePage(
+              onSubStepChanged: _onSubStepChanged_profile,
+            ),
+            SubscriptionPage(onSubStepChanged: _onSubStepChanged_profile),
+            PaymentSubscriptionPage(
+                onSubStepChanged: _onSubStepChanged_profile),
+          ],
+        );
       default:
         return Container();
     }
   }
-
 }
