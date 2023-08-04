@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class ClothImagePage extends StatefulWidget {
   final File? image;
+  final ValueChanged<int> onSubStepChanged;
 
-  const ClothImagePage({Key? key, this.image}) : super(key: key);
+  const ClothImagePage({Key? key, this.image, required this.onSubStepChanged}) : super(key: key);
 
   @override
   State<ClothImagePage> createState() => _ClothImagePageState();
@@ -80,5 +81,7 @@ class _ClothImagePageState extends State<ClothImagePage> {
     });
   }
 
-  void improveImage() {}
+  void improveImage() {
+    widget.onSubStepChanged(2);
+  }
 }

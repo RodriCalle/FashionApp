@@ -1,6 +1,8 @@
 import 'package:demo_fashion_app/components/AppBarComponent.dart';
 import 'package:demo_fashion_app/views/ClothImagePage.dart';
+import 'package:demo_fashion_app/views/GenerateOutfitsPage.dart';
 import 'package:demo_fashion_app/views/HomePage.dart';
+import 'package:demo_fashion_app/views/OutfitsPage.dart';
 import 'package:demo_fashion_app/views/PaymentSubscriptionPage.dart';
 import 'package:demo_fashion_app/views/ProfilePage.dart';
 import 'package:demo_fashion_app/views/SubscriptionPage.dart';
@@ -26,9 +28,10 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
   ];
 
   final List<String> _subTitles = [
+    "Seleccionar Prenda",
     "Imagen de la prenda de vestir",
-    "Genera conjuntos de ropa1",
-    "Genera conjuntos de ropa2",
+    "Genera conjuntos de ropa",
+    "Conjuntos Generados",
   ];
 
   final List<String> _subTitlesProfile = [
@@ -79,6 +82,7 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
           ],
         ),
       ),*/
+      resizeToAvoidBottomInset: false,
       appBar: AppBarComponent(title: _appBarTitle),
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
@@ -116,17 +120,21 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
         return IndexedStack(
           index: _subStepIndex,
           children: [
+            OutfitsPage(),
             HomePage(
               onSubStepChanged: _onSubStepChanged,
             ),
-            ClothImagePage(),
-            Container(color: Colors.red),
+            ClothImagePage(
+              onSubStepChanged: _onSubStepChanged,
+            ),
+            GenerateOutfitsPage(onSubStepChanged: _onSubStepChanged),
+            Container(color: Colors.brown),
           ],
         );
       case 1:
-        return ClothImagePage();
+        return Container(color: Colors.red);
       case 2:
-        return ClothImagePage();
+        return Container(color: Colors.blue);
       case 3:
         return IndexedStack(
           index: _subStepIndex,
