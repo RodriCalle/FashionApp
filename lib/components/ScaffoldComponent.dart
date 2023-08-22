@@ -2,6 +2,8 @@ import 'package:demo_fashion_app/components/AppBarComponent.dart';
 import 'package:demo_fashion_app/views/ClothImagePage.dart';
 import 'package:demo_fashion_app/views/GenerateOutfitsPage.dart';
 import 'package:demo_fashion_app/views/HomePage.dart';
+import 'package:demo_fashion_app/views/MyClothes.dart';
+import 'package:demo_fashion_app/views/MyOutfits.dart';
 import 'package:demo_fashion_app/views/OutfitsPage.dart';
 import 'package:demo_fashion_app/views/PaymentSubscriptionPage.dart';
 import 'package:demo_fashion_app/views/ProfilePage.dart';
@@ -132,9 +134,9 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
           ],
         );
       case 1:
-        return Container(color: Colors.red);
+        return MyClothes(onSubStepChanged: _onSubStepChanged);
       case 2:
-        return Container(color: Colors.blue);
+        return MyOutfits(onSubStepChanged: _onSubStepChanged);
       case 3:
         return IndexedStack(
           index: _subStepIndex,
