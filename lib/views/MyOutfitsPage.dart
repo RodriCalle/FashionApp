@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../classes/ClothInfo.dart';
 
-class MyOutfits extends StatefulWidget {
+class MyOutfitsPage extends StatefulWidget {
   final ValueChanged<int> onSubStepChanged;
-  const MyOutfits({super.key, required this.onSubStepChanged});
+  const MyOutfitsPage({super.key, required this.onSubStepChanged});
 
   @override
-  State<MyOutfits> createState() => _MyOutfitsState();
+  State<MyOutfitsPage> createState() => _MyOutfitsPageState();
 }
 
-class _MyOutfitsState extends State<MyOutfits> {
+class _MyOutfitsPageState extends State<MyOutfitsPage> {
   List<ClothInfo> clothList = [
     ClothInfo(
         name: 'Conjunto 1',

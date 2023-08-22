@@ -10,6 +10,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
       ),
+      automaticallyImplyLeading: false,
       backgroundColor: Colors.black,
       titleTextStyle: const TextStyle(
         color: Colors.white,

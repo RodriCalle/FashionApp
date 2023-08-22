@@ -2,16 +2,16 @@ import 'package:demo_fashion_app/classes/ClientCloth.dart';
 import 'package:demo_fashion_app/classes/ClientClothes.dart';
 import 'package:flutter/material.dart';
 
-class MyClothes extends StatefulWidget {
+class MyClothesPage extends StatefulWidget {
   final ValueChanged<int> onSubStepChanged;
 
-  const MyClothes({super.key, required this.onSubStepChanged});
+  const MyClothesPage({super.key, required this.onSubStepChanged});
 
   @override
-  State<MyClothes> createState() => _MyClothesState();
+  State<MyClothesPage> createState() => _MyClothesPageState();
 }
 
-class _MyClothesState extends State<MyClothes> {
+class _MyClothesPageState extends State<MyClothesPage> {
   List<ClientCloth> clothList = [
     ClientCloth(
         name: 'Polo camisero 1',

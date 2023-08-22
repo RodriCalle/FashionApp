@@ -1,4 +1,6 @@
 import 'package:demo_fashion_app/classes/Auth.dart';
+import 'package:demo_fashion_app/components/ScaffoldComponent.dart';
+import 'package:demo_fashion_app/views/SignUpPage.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -136,6 +138,10 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ScaffoldComponent()),
+                          );
                         }
                       }),
                 ),
@@ -144,9 +150,18 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text("¿Todavía no tienes cuenta?",
                         style: TextStyle(decoration: TextDecoration.underline)),
-                    Text(
-                      " Regístrate",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    TextButton(
+                      child: const Text(
+                        " Haz clic aquí",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignUpPage()),
+                        );
+                      },
                     )
                   ],
                 )

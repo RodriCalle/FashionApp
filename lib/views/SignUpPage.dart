@@ -1,4 +1,5 @@
 import 'package:demo_fashion_app/classes/Auth.dart';
+import 'package:demo_fashion_app/views/LoginPage.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -279,6 +280,26 @@ class _SignUpPageState extends State<SignUpPage> {
                         }
                       }),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("¿Ya tienes una cuenta?",
+                        style: TextStyle(decoration: TextDecoration.underline, color: Colors.white)),
+                    TextButton(
+                      child: const Text(
+                        " Inicia sesión aquí",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
+                      },
+                    )
+                  ],
+                )
               ],
             ),
           ),

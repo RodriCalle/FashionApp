@@ -2,8 +2,8 @@ import 'package:demo_fashion_app/components/AppBarComponent.dart';
 import 'package:demo_fashion_app/views/ClothImagePage.dart';
 import 'package:demo_fashion_app/views/GenerateOutfitsPage.dart';
 import 'package:demo_fashion_app/views/HomePage.dart';
-import 'package:demo_fashion_app/views/MyClothes.dart';
-import 'package:demo_fashion_app/views/MyOutfits.dart';
+import 'package:demo_fashion_app/views/MyClothesPage.dart';
+import 'package:demo_fashion_app/views/MyOutfitsPage.dart';
 import 'package:demo_fashion_app/views/OutfitsPage.dart';
 import 'package:demo_fashion_app/views/PaymentSubscriptionPage.dart';
 import 'package:demo_fashion_app/views/ProfilePage.dart';
@@ -122,7 +122,6 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
         return IndexedStack(
           index: _subStepIndex,
           children: [
-            OutfitsPage(),
             HomePage(
               onSubStepChanged: _onSubStepChanged,
             ),
@@ -130,13 +129,14 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
               onSubStepChanged: _onSubStepChanged,
             ),
             GenerateOutfitsPage(onSubStepChanged: _onSubStepChanged),
+            const OutfitsPage(),
             Container(color: Colors.brown),
           ],
         );
       case 1:
-        return MyClothes(onSubStepChanged: _onSubStepChanged);
+        return MyClothesPage(onSubStepChanged: _onSubStepChanged);
       case 2:
-        return MyOutfits(onSubStepChanged: _onSubStepChanged);
+        return MyOutfitsPage(onSubStepChanged: _onSubStepChanged);
       case 3:
         return IndexedStack(
           index: _subStepIndex,
