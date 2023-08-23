@@ -2,6 +2,9 @@ import 'package:demo_fashion_app/classes/Auth.dart';
 import 'package:demo_fashion_app/views/LoginPage.dart';
 import 'package:flutter/material.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
@@ -24,7 +27,47 @@ class _SignUpPageState extends State<SignUpPage> {
     fontWeight: FontWeight.w600,
   );
 
+  List<String> options = [
+    'Masculino',
+    'Femenino',
+    'Prefiero no decirlo',
+  ];
+
   final double heightTextFormField = 0.13;
+
+  void _signUp() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: accountData.email,
+          password: accountData.password,
+        );
+
+        print(userCredential);
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'names': accountData.names,
+          'lastNames': accountData.lastNames,
+          'sex': accountData.sex,
+          'photoUrl':
+              "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg"
+        });
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      } catch (e) {
+        print("Error durante el registro: $e");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +86,18 @@ class _SignUpPageState extends State<SignUpPage> {
               children: [
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                  width: bodyWidth * 0.8,
-                  child: Text("Registro", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                  width: bodyWidth * 0.75,
+                  child: Text("Registro",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold)),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     Container(
-                      width: bodyWidth * 0.8,
+                      width: bodyWidth * 0.75,
                       height: bodyHeight * heightTextFormField,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -93,7 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     Container(
-                      width: bodyWidth * 0.8,
+                      width: bodyWidth * 0.75,
                       height: bodyHeight * heightTextFormField,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -135,7 +181,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     Container(
-                      width: bodyWidth * 0.8,
+                      width: bodyWidth * 0.75,
                       height: bodyHeight * heightTextFormField,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -148,30 +194,38 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ],
                           ),
-                          TextFormField(
-                            cursorColor: Colors.black,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: border,
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
-                              focusedBorder: border,
-                              errorBorder: border,
-                              errorStyle: TextStyle(color: Colors.red),
-                            ),
-                            onSaved: (value) {
-                              accountData.sex = value!;
-                            },
-                          ),
+                          DropdownButtonFormField<String>(
+                              value: options.first,
+                              focusColor: Colors.white,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  accountData.sex = newValue!;
+                                });
+                              },
+                              items: options.map<DropdownMenuItem<String>>(
+                                  (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 16),
+                              decoration: InputDecoration(
+                                border: border,
+                                focusedBorder: border,
+                                errorBorder: border,
+                                fillColor: Colors.white,
+                                filled: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 18),
+                              ),
+                              borderRadius: BorderRadius.circular(30)),
                         ],
                       ),
                     ),
                     Container(
-                      width: bodyWidth * 0.8,
+                      width: bodyWidth * 0.75,
                       height: bodyHeight * heightTextFormField,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -213,7 +267,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     Container(
-                      width: bodyWidth * 0.8,
+                      width: bodyWidth * 0.75,
                       height: bodyHeight * heightTextFormField,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -255,12 +309,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         ],
                       ),
                     ),
-
                   ],
                 ),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                  width: bodyWidth * 0.65,
+                  width: bodyWidth * 0.75,
                   child: MaterialButton(
                       color: Color.fromRGBO(249, 235, 219, 1),
                       shape: RoundedRectangleBorder(
@@ -274,20 +327,19 @@ class _SignUpPageState extends State<SignUpPage> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18)),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                        }
-                      }),
+                      onPressed: _signUp
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("¿Ya tienes una cuenta?",
-                        style: TextStyle(decoration: TextDecoration.underline, color: Colors.white)),
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Colors.white)),
                     TextButton(
                       child: const Text(
-                        " Inicia sesión aquí",
+                        " Inicia sesión",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white),
                       ),

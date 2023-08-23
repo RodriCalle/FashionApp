@@ -9,6 +9,7 @@ class Login {
 }
 
 class Account {
+  String id;
   String names;
   String lastNames;
   String sex;
@@ -16,6 +17,7 @@ class Account {
   String password;
 
   Account({
+    this.id = '',
     this.names = '',
     this.lastNames = '',
     this.sex = '',

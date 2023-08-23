@@ -2,6 +2,9 @@ import 'package:demo_fashion_app/classes/Auth.dart';
 import 'package:demo_fashion_app/components/ScaffoldComponent.dart';
 import 'package:demo_fashion_app/views/SignUpPage.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,11 +16,36 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>(); // GlobalKey para el formulario
   Login loginData = new Login();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final OutlineInputBorder border = OutlineInputBorder(
     borderRadius: BorderRadius.circular(30),
     borderSide: BorderSide(color: Colors.black),
   );
+
+  void _login() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      try {
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: loginData.email,
+          password: loginData.password,
+        );
+
+        // El inicio de sesión fue exitoso, puedes realizar acciones adicionales o navegar a otra página.
+        print("Inicio de sesión exitoso: ${userCredential.user!.uid}");
+
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ScaffoldComponent()),
+        );
+      } catch (e) {
+        showOverlay(context, e.toString(), Colors.red);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,15 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18)),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ScaffoldComponent()),
-                          );
-                        }
-                      }),
+                      onPressed: _login),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
