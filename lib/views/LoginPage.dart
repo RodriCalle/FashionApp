@@ -4,6 +4,7 @@ import 'package:demo_fashion_app/views/SignUpPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../utils/shared_preferences_utils.dart';
 import '../utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -35,7 +36,9 @@ class _LoginPageState extends State<LoginPage> {
 
         // El inicio de sesión fue exitoso, puedes realizar acciones adicionales o navegar a otra página.
         print("Inicio de sesión exitoso: ${userCredential.user!.uid}");
+        Account account = new Account(id: userCredential.user!.uid);
 
+        saveUserLoggedIn(account);
 
         Navigator.push(
           context,

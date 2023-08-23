@@ -20,7 +20,7 @@ class Account {
     this.id = '',
     this.names = '',
     this.lastNames = '',
-    this.sex = '',
+    this.sex = 'Masculino',
     this.email = '',
     this.password = ''
   });
