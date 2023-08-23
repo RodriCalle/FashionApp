@@ -66,7 +66,7 @@ class _SignUpPageState extends State<SignUpPage> {
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
       } catch (e) {
-        //print("Error durante el registro: $e");
+        print("Error durante el registro: $e");
         showOverlay(context, e.toString(), Colors.red);
       }
     }
