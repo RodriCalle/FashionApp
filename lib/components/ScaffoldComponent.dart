@@ -42,6 +42,11 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
     "Realizar Pago",
   ];
 
+  final List<String> _subTitlesClothes = [
+    "Prendas favoritas",
+    "Genera conjuntos de ropa",
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +73,13 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
     setState(() {
       _subStepIndex = index;
       _appBarTitle = _subTitlesProfile[_subStepIndex];
+    });
+  }
+
+  void _onSubStepChangedClothes(int index) {
+    setState(() {
+      _subStepIndex = index;
+      _appBarTitle = _subTitlesClothes[_subStepIndex];
     });
   }
 
@@ -134,9 +146,21 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
           ],
         );
       case 1:
-        return MyClothesPage(onSubStepChanged: _onSubStepChanged);
+        return IndexedStack(
+          index: _subStepIndex,
+          children: [
+            MyClothesPage(onSubStepChanged: _onSubStepChanged),
+            GenerateOutfitsPage(onSubStepChanged: _onSubStepChanged),
+          ],
+        );
       case 2:
-        return MyOutfitsPage(onSubStepChanged: _onSubStepChanged);
+        return IndexedStack(
+          index: _subStepIndex,
+          children: [
+            MyOutfitsPage(onSubStepChanged: _onSubStepChanged),
+            // const OutfitsPage()
+          ],
+        );
       case 3:
         return IndexedStack(
           index: _subStepIndex,
