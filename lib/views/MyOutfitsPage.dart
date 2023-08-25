@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../classes/ClothInfo.dart';
 
@@ -32,84 +33,66 @@ class _MyOutfitsPageState extends State<MyOutfitsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        double bodyWidth = constraints.maxWidth;
-        double bodyHeight = constraints.maxHeight;
-        return Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                  itemCount: clothList.length,
-                  itemBuilder: (context, index) {
-                    ClothInfo clientOutfitInfo = clothList[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 25),
-                      child: Container(
-                        height: bodyHeight * 0.23,
-                        decoration: BoxDecoration(
-                            color: Colors.black12,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.network(
-                                  clientOutfitInfo.image,
-                                  height: 130,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  clientOutfitInfo.name,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                MaterialButton(
-                                    color: Color.fromRGBO(249, 235, 219, 1),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        side: BorderSide.none),
-                                    child: const Text("Ver",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15)),
-                                    onPressed: () {}),
-                                MaterialButton(
-                                    color: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        side: BorderSide.none),
-                                    child: const Text("Quitar",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15)),
-                                    onPressed: () {
-                                      setState(() {
-                                        clothList.removeAt(index);
-                                      });
-                                    }),
-                              ],
-                            ),
-                          ],
+    return LayoutBuilder(builder: (context, constraints) {
+      return MasonryGridView.count(
+        crossAxisCount: 2,
+        itemCount: clothList.length,
+        itemBuilder: (context, index) {
+          ClothInfo clientOutfitInfo = clothList[index];
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        padding:
+                            const EdgeInsets.only(top: 18, left: 12, right: 18),
+                        child: Image.network(
+                          clientOutfitInfo.image,
+                          height: 135,
+                          width: 130,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    );
-                  }),
-            ),
-          ],
-        );
-      },
-    );
+                      Positioned(
+                        top: -6,
+                        right: -9,
+                        // left: -23,
+                        child: IconButton(
+                          onPressed: () {
+                            {}
+                          },
+                          icon: const Icon(Icons.favorite),
+                          iconSize: 36,
+                        ),
+                      )
+                    ],
+                  ),
+                  MaterialButton(
+                      color: const Color.fromRGBO(249, 235, 219, 1),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          side: BorderSide.none),
+                      child: const Text("Ver",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14)),
+                      onPressed: () {
+                        // widget.onSubStepChanged(1);
+                      }),
+                  const SizedBox(
+                    height: 15,
+                  )
+                ],
+              )
+            ],
+          );
+        },
+      );
+    });
   }
 }
