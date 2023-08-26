@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:tflite_flutter/tflite_flutter.dart';
+
 class HomePage extends StatefulWidget {
   final ValueChanged<int> onSubStepChanged;
 
@@ -15,13 +17,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  File? image;
+  File? _image;
+
+  File? _image_2;
   String nombre = "Rodrigo";
 
   @override
   void initState() {
     super.initState();
-    image = null;
+    _image = null;
   }
 
   Future pickImageFromGallery() async {
@@ -29,7 +33,7 @@ class _HomePageState extends State<HomePage> {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
       final imageTemp = File(image.path);
-      setState(() => this.image = imageTemp);
+      setState(() => _image = imageTemp);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
@@ -40,12 +44,31 @@ class _HomePageState extends State<HomePage> {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
       if (image == null) return;
       final imageTemp = File(image.path);
-      setState(() => this.image = imageTemp);
+      setState(() => _image = imageTemp);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
     widget.onSubStepChanged(1);
   }
+
+  //---------------------------------------
+  void improveImage() {
+    final model = Interpreter.fromAsset('model.tflite');
+
+// Carga la imagen
+    final image = Image.file(_image!);
+
+// Crea un tensor para la imagen
+//     final inputTensor = ImageTe.fromImage(image);
+
+// // Aplica los filtros
+//     final outputTensor = model.run(inputTensor);
+
+// // Obtiene la imagen procesada
+//     final processedImage = outputTensor.toImage();
+  }
+
+  //---------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +190,49 @@ class _HomePageState extends State<HomePage> {
                           pickImageFromCamera();
                         }),
                   ),
+                  Container(
+                    width: bodyWidth * 0.6,
+                    child: MaterialButton(
+                        color: Color.fromRGBO(249, 235, 219, 1),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            side: BorderSide.none),
+                        child: const Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text("Probar",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18)),
+                        ),
+                        onPressed: () {
+                          improveImage();
+                        }),
+                  ),
+
+                  //------------------------------------
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (_image != null)
+                        Image.file(
+                          _image!,
+                          height: 140,
+                        ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      if (_image != null)
+                        Image.file(
+                          _image!,
+                          height: 140,
+                        ),
+                    ],
+                  )
+
+                  // -----------------------------------
+
                   /*Container(
                     child: image == null
                         ? const Text('No image selected.')
@@ -181,5 +247,3 @@ class _HomePageState extends State<HomePage> {
     });
   }
 }
-
-
