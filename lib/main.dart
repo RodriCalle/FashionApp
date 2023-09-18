@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fashion App',
       debugShowCheckedModeBanner: false,
-      home: const ScaffoldComponent(),
+    /*  home: const ScaffoldComponent(),*/
+      home: LoginPage(),
     );
   }
 }

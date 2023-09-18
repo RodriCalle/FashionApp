@@ -10,18 +10,14 @@ Future<void> saveUserLoggedIn(Account account) async {
 }
 
 // Recuperar información del usuario logueado
-Future<Account?> getUserLoggedIn() async {
+Future<Account> getUserLoggedIn() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  String? userId = prefs.getString('user_id');
-  String? userName = prefs.getString('user_name');
-  String? userEmail = prefs.getString('user_email');
+  String userId = prefs.getString('user_id') ?? '';
+  String? userName = prefs.getString('user_name') ?? '';
+  String? userEmail = prefs.getString('user_email') ?? '';
 
-  if (userId != null) {
-    return Account(id: userId, names: userName!, email: userEmail!);
-  } else {
-    return null;
-  }
+  return Account(id: userId, names: userName, email: userEmail);
 }
 
 

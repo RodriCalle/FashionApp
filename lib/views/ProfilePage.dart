@@ -1,6 +1,10 @@
 import 'dart:io';
 
-import 'package:demo_fashion_app/classes/ClientProfile.dart';
+import 'package:demo_fashion_app/classes/Auth.dart';
+import 'package:demo_fashion_app/services/FirebaseService.dart';
+import 'package:demo_fashion_app/styles/BorderStyles.dart';
+import 'package:demo_fashion_app/styles/TextStyles.dart';
+import 'package:demo_fashion_app/utils/utils.dart';
 // import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
@@ -16,45 +20,56 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final _formPorfileKey = GlobalKey<FormState>();
-  String name = 'Daniel';
-  String lastName = 'Santillán Ávila';
-  String gender = 'Masculino';
-  String email = 'danielSan07@gmail.com';
-
-  // Controladores de dato
-  final _controllerName = TextEditingController();
-  final _controllerLastName = TextEditingController();
-  final _controllerGender = TextEditingController();
-  final _controllerEmail = TextEditingController();
-
-  final Profile profileData =
-      Profile('Daniel', 'Santillán', 'Masculino', 'danielsan07@gmail.com');
-  // final Profile proData = Profile(name, lastName, gender, email);
-
+  final _formProfileKey = GlobalKey<FormState>();
+  bool disabledForm = true;
+  Account account = Account();
   final double heightTextFormField = 0.13;
 
-  bool disabledForm = true;
-
-  final TextStyle txtStyle = const TextStyle(
-    fontSize: 17,
-    color: Colors.black,
-    fontWeight: FontWeight.w600,
-  );
-
-  final OutlineInputBorder border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(30),
-    borderSide: const BorderSide(color: Colors.white),
-  );
+  final _controllerName = TextEditingController();
+  final _controllerLastName = TextEditingController();
+  final _controllerEmail = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _controllerName.text = profileData.name;
-    _controllerLastName.text = profileData.lastName;
-    _controllerGender.text = profileData.gender;
-    _controllerEmail.text = profileData.email;
+    _loadUserInfo();
   }
+
+  void _loadUserInfo() async {
+    try {
+      final userInfo = await FirebaseService().getUserInfo();
+      if (userInfo != null) {
+        setState(() {
+          _controllerName.text = userInfo.names;
+          _controllerLastName.text = userInfo.lastNames;
+          _controllerEmail.text = userInfo.email;
+          account.sex = userInfo.sex;
+        });
+      }
+    } catch (e) {
+      print('Error al cargar la información del usuario: $e');
+    }
+  }
+
+  void _updateInfo() async {
+    try {
+      final userInfo = await FirebaseService().updateUserInfo(
+        account.names,
+        account.lastNames,
+        account.sex
+      );
+
+      if (userInfo != null) {
+        showOverlay(context, "Datos actualizados correctamente.", Colors.green);
+      }
+    } catch (e) {
+      showOverlay(context, e.toString(), Colors.red);
+    }
+  }
+
+  void _changeProfileImage() async {
+
+}
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
         return SingleChildScrollView(
             child: Container(
                 child: Form(
-          key: _formPorfileKey,
+          key: _formProfileKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                           child: IconButton(
                                             onPressed: () {
-                                              changeProfileImage();
+                                              _changeProfileImage();
                                             },
                                             icon: const Icon(
                                                 Icons.camera_alt_outlined),
@@ -157,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Row(
-                            children: [Text('Nombres', style: txtStyle)],
+                            children: [Text('Nombres', style: txt17)],
                           ),
                           const SizedBox(
                             height: 7,
@@ -183,12 +198,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'El campo no debe quedar vacío.';
+                                return 'El campo es obligatorio.';
                               }
                               return null;
                             },
                             onSaved: (value) {
-                              profileData.name = value!;
+                              account.names = value!;
                             },
                           ),
                         ],
@@ -200,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Row(
-                            children: [Text('Apellidos', style: txtStyle)],
+                            children: [Text('Apellidos', style: txt17)],
                           ),
                           const SizedBox(
                             height: 7,
@@ -226,12 +241,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'El campo no debe quedar vacío.';
+                                return 'El campo es obligatorio.';
                               }
                               return null;
                             },
                             onSaved: (value) {
-                              profileData.lastName = value!;
+                              account.lastNames = value!;
                             },
                           ),
                         ],
@@ -243,39 +258,40 @@ class _ProfilePageState extends State<ProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Row(
-                            children: [Text('Sexo', style: txtStyle)],
+                            children: [Text('Sexo', style: txt17)],
                           ),
                           const SizedBox(
                             height: 7,
                           ),
-                          TextFormField(
-                            controller: _controllerGender,
-                            enabled: disabledForm ? false : true,
-                            cursorColor: Colors.black,
-                            style: const TextStyle(
-                              color: Colors.black,
-                            ),
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: (disabledForm)
-                                  ? Colors.black12
-                                  : Colors.white,
-                              border: border,
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 15),
-                              focusedBorder: border,
-                              errorBorder: border,
-                              errorStyle: const TextStyle(color: Colors.red),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'El campo no debe quedar vacío.';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              profileData.gender = value!;
-                            },
+                          DropdownButtonFormField<String>(
+                              value: account.sex,
+                              focusColor: Colors.white,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  account.sex = newValue!;
+                                });
+                              },
+                              items: options.map<DropdownMenuItem<String>>(
+                                  (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  enabled: disabledForm ? false : true,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              style: TextStyle(color: Colors.black, fontSize: 16),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: (disabledForm)
+                                    ? Colors.black12
+                                    : Colors.white,
+                                border: border,
+                                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                                focusedBorder: border,
+                                errorBorder: border,
+                                errorStyle: const TextStyle(color: Colors.red),
+                              ),
+                              borderRadius: BorderRadius.circular(30)
                           ),
                         ],
                       ),
@@ -286,23 +302,21 @@ class _ProfilePageState extends State<ProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Row(
-                            children: [Text('Email', style: txtStyle)],
+                            children: [Text('Email', style: txt17)],
                           ),
                           const SizedBox(
                             height: 7,
                           ),
                           TextFormField(
                             controller: _controllerEmail,
-                            enabled: disabledForm ? false : true,
+                            enabled: false,
                             cursorColor: Colors.black,
                             style: const TextStyle(
                               color: Colors.black,
                             ),
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: (disabledForm)
-                                  ? Colors.black12
-                                  : Colors.white,
+                              fillColor: Colors.black12,
                               border: border,
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 15),
@@ -312,12 +326,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'El campo no debe quedar vacío.';
+                                return 'El campo es obligatorio.';
                               }
                               return null;
                             },
                             onSaved: (value) {
-                              profileData.email = value!;
+                              account.email = value!;
                             },
                           ),
                         ],
@@ -372,8 +386,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                       fontSize: 13)),
                             ),
                             onPressed: () {
-                              if (_formPorfileKey.currentState!.validate()) {
-                                _formPorfileKey.currentState!.save();
+                              if (_formProfileKey.currentState!.validate()) {
+                                _formProfileKey.currentState!.save();
+                                _updateInfo();
                               }
                               setState(() => disabledForm = true);
                             }),
@@ -405,5 +420,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
-changeProfileImage() {}

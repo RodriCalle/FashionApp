@@ -13,6 +13,7 @@ class Account {
   String names;
   String lastNames;
   String sex;
+  String photoUrl;
   String email;
   String password;
 
@@ -21,6 +22,7 @@ class Account {
     this.names = '',
     this.lastNames = '',
     this.sex = 'Masculino',
+    this.photoUrl = '',
     this.email = '',
     this.password = ''
   });

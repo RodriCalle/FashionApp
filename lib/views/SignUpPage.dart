@@ -1,9 +1,8 @@
 import 'package:demo_fashion_app/classes/Auth.dart';
+import 'package:demo_fashion_app/services/FirebaseService.dart';
+import 'package:demo_fashion_app/styles/TextStyles.dart';
 import 'package:demo_fashion_app/views/LoginPage.dart';
 import 'package:flutter/material.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../utils/utils.dart';
 
@@ -17,23 +16,19 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   Account accountData = new Account();
+  bool _obscureText = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
 
   final OutlineInputBorder border = OutlineInputBorder(
     borderRadius: BorderRadius.circular(30),
     borderSide: BorderSide(color: Colors.white),
   );
-
-  final TextStyle txtStyle = TextStyle(
-    fontSize: 20,
-    color: Colors.white,
-    fontWeight: FontWeight.w600,
-  );
-
-  List<String> options = [
-    'Masculino',
-    'Femenino',
-    'Prefiero no decirlo',
-  ];
 
   final double heightTextFormField = 0.13;
 
@@ -42,29 +37,15 @@ class _SignUpPageState extends State<SignUpPage> {
       _formKey.currentState!.save();
 
       try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: accountData.email,
-          password: accountData.password,
+        await FirebaseService().createUserWithEmailAndPassword(
+          accountData.email,
+          accountData.password,
+          accountData.names,
+          accountData.lastNames,
+          accountData.sex,
         );
 
-        print(userCredential);
-
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
-          'names': accountData.names,
-          'lastNames': accountData.lastNames,
-          'sex': accountData.sex,
-          'photoUrl':
-              "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg"
-        });
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        );
+        // La cuenta se creó exitosamente, puedes realizar acciones adicionales.
       } catch (e) {
         print("Error durante el registro: $e");
         showOverlay(context, e.toString(), Colors.red);
@@ -109,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             children: [
                               Text(
                                 "Nombres",
-                                style: txtStyle,
+                                style: txt20,
                               ),
                             ],
                           ),
@@ -151,7 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             children: [
                               Text(
                                 "Apellidos",
-                                style: txtStyle,
+                                style: txt20,
                               ),
                             ],
                           ),
@@ -193,7 +174,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             children: [
                               Text(
                                 "Sexo",
-                                style: txtStyle,
+                                style: txt20,
                               ),
                             ],
                           ),
@@ -237,7 +218,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             children: [
                               Text(
                                 "Correo electronico",
-                                style: txtStyle,
+                                style: txt20,
                               ),
                             ],
                           ),
@@ -279,12 +260,12 @@ class _SignUpPageState extends State<SignUpPage> {
                             children: [
                               Text(
                                 "Contraseña",
-                                style: txtStyle,
+                                style: txt20,
                               ),
                             ],
                           ),
                           TextFormField(
-                            obscureText: true,
+                            obscureText: _obscureText,
                             cursorColor: Colors.black,
                             style: TextStyle(
                               color: Colors.black,
@@ -298,6 +279,13 @@ class _SignUpPageState extends State<SignUpPage> {
                               focusedBorder: border,
                               errorBorder: border,
                               errorStyle: TextStyle(color: Colors.red),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: _togglePasswordVisibility,
+                              ),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {

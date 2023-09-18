@@ -31,9 +31,16 @@ void showOverlay(BuildContext context, String message, Color? color) {
     },
   );
 
-  overlayState?.insert(overlayEntry);
+  overlayState.insert(overlayEntry);
 
   Future.delayed(Duration(seconds: 2), () {
     overlayEntry.remove();
   });
 }
+
+
+List<String> options = [
+  'Masculino',
+  'Femenino',
+  'Prefiero no decirlo',
+];

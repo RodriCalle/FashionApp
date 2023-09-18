@@ -1,6 +1,9 @@
 import 'dart:io';
 
-import 'package:demo_fashion_app/views/ClothImagePage.dart';
+import 'package:demo_fashion_app/classes/Auth.dart';
+import 'package:demo_fashion_app/services/FirebaseService.dart';
+import 'package:demo_fashion_app/utils/image_utils.dart.dart';
+import 'package:demo_fashion_app/utils/shared_preferences_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,13 +19,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   File? image;
-  String nombre = "Rodrigo";
+  Account loggedInUser = Account();
 
   @override
   void initState() {
     super.initState();
     image = null;
+    _loadLoggedInUser();
   }
+
+  void _loadLoggedInUser() async {
+    final user = await FirebaseService().getUserInfo();
+    setState(() {
+      loggedInUser = user;
+    });
+    print(loggedInUser.names);
+  }
+
 
   Future pickImageFromGallery() async {
     try {
@@ -30,6 +43,8 @@ class _HomePageState extends State<HomePage> {
       if (image == null) return;
       final imageTemp = File(image.path);
       setState(() => this.image = imageTemp);
+
+      processImageWithESRGAN(imageTemp);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
@@ -41,10 +56,12 @@ class _HomePageState extends State<HomePage> {
       if (image == null) return;
       final imageTemp = File(image.path);
       setState(() => this.image = imageTemp);
+
+      processImageWithESRGAN(imageTemp);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
-    widget.onSubStepChanged(1);
+    // widget.onSubStepChanged(1);
   }
 
   @override
@@ -82,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Text(
-                              nombre + ",",
+                              loggedInUser.names + ",",
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),

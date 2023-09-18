@@ -1,10 +1,9 @@
 import 'package:demo_fashion_app/classes/Auth.dart';
 import 'package:demo_fashion_app/components/ScaffoldComponent.dart';
+import 'package:demo_fashion_app/services/FirebaseService.dart';
 import 'package:demo_fashion_app/views/SignUpPage.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-import '../utils/shared_preferences_utils.dart';
 import '../utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,8 +15,14 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>(); // GlobalKey para el formulario
-  Login loginData = new Login();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  Login loginData = Login(email: "rcalle@acity.com.pe", password: "Rodrigo123@");
+  bool _obscureText = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   final OutlineInputBorder border = OutlineInputBorder(
     borderRadius: BorderRadius.circular(30),
@@ -29,17 +34,12 @@ class _LoginPageState extends State<LoginPage> {
       _formKey.currentState!.save();
 
       try {
-        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: loginData.email,
-          password: loginData.password,
+        await FirebaseService().signInWithEmailAndPassword(
+          loginData.email,
+          loginData.password,
         );
 
-        // El inicio de sesión fue exitoso, puedes realizar acciones adicionales o navegar a otra página.
-        print("Inicio de sesión exitoso: ${userCredential.user!.uid}");
-        Account account = new Account(id: userCredential.user!.uid);
-
-        saveUserLoggedIn(account);
-
+        // Inicio de sesión exitoso, puedes navegar a otra página.
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ScaffoldComponent()),
@@ -88,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),*/
                         child: TextFormField(
+                          initialValue: loginData.email,
                           cursorColor: Colors.white,
                           style: TextStyle(
                             color: Colors.white,
@@ -119,7 +120,8 @@ class _LoginPageState extends State<LoginPage> {
                         width: bodyWidth * 0.65,
                         height: bodyHeight * 0.12,
                         child: TextFormField(
-                          obscureText: true,
+                          initialValue: loginData.password,
+                          obscureText: _obscureText,
                           cursorColor: Colors.white,
                           style: TextStyle(
                             color: Colors.white,
@@ -135,6 +137,13 @@ class _LoginPageState extends State<LoginPage> {
                             focusedBorder: border,
                             errorBorder: border,
                             errorStyle: TextStyle(color: Colors.red),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscureText ? Icons.visibility : Icons.visibility_off,
+                                color: Colors.grey,
+                              ),
+                              onPressed: _togglePasswordVisibility,
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
