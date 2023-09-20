@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
+import 'package:demo_fashion_app/utils/utils.dart';
+import 'package:huawei_ml_image/huawei_ml_image.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
 
@@ -61,4 +62,31 @@ Future<File?> processImageWithESRGAN(File inputImageFile) async {
 
   // Devuelve el archivo de la imagen mejorada
   return enhancedImageFile;
+}
+
+Future<File?> applySuperResolution(File imageFile) async {
+  print("pathhhhhhh2" + imageFile.path.toString());
+
+  MLImageSuperResolutionAnalyzerSetting setting = MLImageSuperResolutionAnalyzerSetting.create(path: imageFile.path);
+  MLImageSuperResolutionAnalyzer analyzer = MLImageSuperResolutionAnalyzer();
+
+  try {
+    final superResolutionResult = await analyzer.asyncAnalyseFrame(setting);
+    print("siii ${superResolutionResult.bytes}");
+    if (superResolutionResult != null) {
+      final superResolutionImageFile = File('ruta_de_tu_archivo_de_salida.jpg');
+      await superResolutionImageFile.writeAsBytes(superResolutionResult.bytes as List<int>);
+      await saveFile(superResolutionImageFile);
+      return superResolutionImageFile;
+    } else {
+      // Manejar el caso en que no se pudo realizar la superresolución
+      print('Error al realizar la superresolución.');
+      return null;
+    }
+  } catch (error) {
+    print('Error durante la superresolución: $error');
+    return null;
+  }
+
+
 }

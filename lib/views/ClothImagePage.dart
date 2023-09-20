@@ -13,6 +13,7 @@ class ClothImagePage extends StatefulWidget {
 }
 
 class _ClothImagePageState extends State<ClothImagePage> {
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -38,12 +39,23 @@ class _ClothImagePageState extends State<ClothImagePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        this.widget.image == null
-                            ? Image.asset(
-                                "assets/images/placeholder.jpg",
-                                width: bodyWidth * 0.6,
-                              )
-                            : Image.file(this.widget.image!)
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all()
+                          ),
+                          height: 300,
+                          width: 300,
+                          child: widget.image == null
+                              ? Image.asset(
+                            "assets/images/placeholder.jpg",
+                            width: bodyWidth * 0.6,
+                          )
+                              : Image.file(
+                              this.widget.image!,
+                              fit: BoxFit.contain
+                          ),
+                        )
+
                       ],
                     ),
                     Row(

@@ -1,13 +1,18 @@
 
+import 'dart:io';
+
 import 'package:demo_fashion_app/classes/Auth.dart';
 import 'package:demo_fashion_app/utils/shared_preferences_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     try {
@@ -113,6 +118,42 @@ class FirebaseService {
       throw e;
     }
   }
+
+  Future<String> uploadImage(File imageFile) async {
+    Account account = await getUserLoggedIn();
+    String userId = account.id;
+
+    try {
+      final Reference storageRef = _storage.ref().child('profile_images/$userId.jpg');
+      final UploadTask uploadTask = storageRef.putFile(imageFile);
+      final TaskSnapshot snapshot = await uploadTask;
+      final String downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } on FirebaseException catch (e) {
+      print('Error al cargar la imagen: $e');
+      // Manejar el error de Firebase Storage aquí.
+      return "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg";
+    } catch (e) {
+      print('Error desconocido al cargar la imagen: $e');
+      // Manejar otros errores aquí.
+      return "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg";
+    }
+  }
+
+  Future<void> updateProfilePhoto(String photoUrl) async {
+    Account account = await getUserLoggedIn();
+    String userId = account.id;
+
+    try {
+      await _firestore.collection('users').doc(userId).update({
+        'photoUrl': photoUrl,
+      });
+    } catch (e) {
+      print('Error al actualizar la foto de perfil: $e');
+      throw e;
+    }
+  }
+
 
 
 }

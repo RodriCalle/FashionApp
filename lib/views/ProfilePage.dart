@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:demo_fashion_app/classes/Auth.dart';
 import 'package:demo_fashion_app/services/FirebaseService.dart';
 import 'package:demo_fashion_app/styles/BorderStyles.dart';
+import 'package:demo_fashion_app/styles/ColorStyles.dart';
 import 'package:demo_fashion_app/styles/TextStyles.dart';
 import 'package:demo_fashion_app/utils/utils.dart';
-// import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   final File? image;
@@ -38,8 +40,11 @@ class _ProfilePageState extends State<ProfilePage> {
   void _loadUserInfo() async {
     try {
       final userInfo = await FirebaseService().getUserInfo();
+
+      print(userInfo.photoUrl);
       if (userInfo != null) {
         setState(() {
+          account.photoUrl = userInfo.photoUrl;
           _controllerName.text = userInfo.names;
           _controllerLastName.text = userInfo.lastNames;
           _controllerEmail.text = userInfo.email;
@@ -53,11 +58,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _updateInfo() async {
     try {
-      final userInfo = await FirebaseService().updateUserInfo(
-        account.names,
-        account.lastNames,
-        account.sex
-      );
+      final userInfo = await FirebaseService()
+          .updateUserInfo(account.names, account.lastNames, account.sex);
 
       if (userInfo != null) {
         showOverlay(context, "Datos actualizados correctamente.", Colors.green);
@@ -68,8 +70,21 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _changeProfileImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemp = File(image.path);
 
-}
+      String newPhotoUrl = await FirebaseService().uploadImage(imageTemp);
+
+      setState(() {
+        account.photoUrl = newPhotoUrl;
+      });
+      await FirebaseService().updateProfilePhoto(newPhotoUrl);
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,12 +146,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Container(
                                       width: 120,
                                       height: 120,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         image: DecorationImage(
                                             fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                                'https://image.winudf.com/v2/image1/bmV0LndsbHBwci5ib3lzX3Byb2ZpbGVfcGljdHVyZXNfc2NyZWVuXzBfMTY2NzUzNzYxN18wOTk/screen-0.webp?fakeurl=1&type=.webp')),
+                                            image: NetworkImage( account.photoUrl.isNotEmpty
+                                              ? account.photoUrl
+                                              : "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg"
+                                            )
+                                        ),
                                       ),
                                     ),
                                     if (!disabledForm)
@@ -147,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             color: Colors.white,
                                             border: Border.all(
                                               width: 2,
-                                              color: Colors.black45,
+                                              color: primaryColor,
                                             ),
                                             borderRadius:
                                                 BorderRadius.circular(30),
@@ -159,7 +177,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             icon: const Icon(
                                                 Icons.camera_alt_outlined),
                                             iconSize: 25,
-                                            color: Colors.black45,
+                                            color: primaryColor,
                                           )),
                                   ],
                                 )
@@ -279,20 +297,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: Text(value),
                                 );
                               }).toList(),
-                              style: TextStyle(color: Colors.black, fontSize: 16),
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 16),
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: (disabledForm)
                                     ? Colors.black12
                                     : Colors.white,
                                 border: border,
-                                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 15),
                                 focusedBorder: border,
                                 errorBorder: border,
                                 errorStyle: const TextStyle(color: Colors.red),
                               ),
-                              borderRadius: BorderRadius.circular(30)
-                          ),
+                              borderRadius: BorderRadius.circular(30)),
                         ],
                       ),
                       const SizedBox(

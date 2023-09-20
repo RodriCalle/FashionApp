@@ -2,16 +2,15 @@ import 'dart:io';
 
 import 'package:demo_fashion_app/classes/Auth.dart';
 import 'package:demo_fashion_app/services/FirebaseService.dart';
-import 'package:demo_fashion_app/utils/image_utils.dart.dart';
-import 'package:demo_fashion_app/utils/shared_preferences_utils.dart';
+import 'package:demo_fashion_app/services/TemperatureService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class HomePage extends StatefulWidget {
   final ValueChanged<int> onSubStepChanged;
-
-  const HomePage({Key? key, required this.onSubStepChanged}) : super(key: key);
+  final ValueChanged<File> onImageSelected;
+  HomePage({Key? key, required this.onSubStepChanged, required this.onImageSelected}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -20,20 +19,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   File? image;
   Account loggedInUser = Account();
+  String temperature = "0";
 
   @override
   void initState() {
     super.initState();
-    image = null;
-    _loadLoggedInUser();
+    _initialLoad();
   }
 
-  void _loadLoggedInUser() async {
+  void _initialLoad() async {
     final user = await FirebaseService().getUserInfo();
+    final temp = await TemperatureService().getTemperature();
     setState(() {
       loggedInUser = user;
+      temperature = temp;
     });
-    print(loggedInUser.names);
+    // print(loggedInUser.names);
   }
 
 
@@ -44,7 +45,12 @@ class _HomePageState extends State<HomePage> {
       final imageTemp = File(image.path);
       setState(() => this.image = imageTemp);
 
-      processImageWithESRGAN(imageTemp);
+      //processImageWithESRGAN(imageTemp);
+      // await saveFile(imageTemp);
+      //await applySuperResolution(imageTemp);
+
+      widget.onImageSelected(imageTemp);
+      widget.onSubStepChanged(1);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
@@ -57,11 +63,12 @@ class _HomePageState extends State<HomePage> {
       final imageTemp = File(image.path);
       setState(() => this.image = imageTemp);
 
-      processImageWithESRGAN(imageTemp);
+      widget.onImageSelected(imageTemp);
+      widget.onSubStepChanged(1);
+      //processImageWithESRGAN(imageTemp);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
-    // widget.onSubStepChanged(1);
   }
 
   @override
@@ -103,8 +110,8 @@ class _HomePageState extends State<HomePage> {
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            const Text(
-                              "la temperatura de hoy es de 26°",
+                            Text(
+                              "la temperatura de hoy es de ${temperature}° C",
                               style: TextStyle(fontSize: 20),
                             ),
                           ],
@@ -184,11 +191,10 @@ class _HomePageState extends State<HomePage> {
                           pickImageFromCamera();
                         }),
                   ),
-                  /*Container(
-                    child: image == null
-                        ? const Text('No image selected.')
-                        : Image.file(image!, width: 200, height: 200),
-                  )*/
+                  Container(
+                      width: bodyWidth * 0.6,
+                      child: Text("La imagen debe ser nitida, y debe mostrar una prenda de vestir.")
+                  )
                 ],
               ),
             ),

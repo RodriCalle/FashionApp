@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:demo_fashion_app/components/AppBarComponent.dart';
 import 'package:demo_fashion_app/views/ClothImagePage.dart';
 import 'package:demo_fashion_app/views/GenerateOutfitsPage.dart';
@@ -21,6 +23,7 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
   int _currentIndex = 0;
   int _subStepIndex = 0;
   late String _appBarTitle = "Seleccionar Prenda";
+  File? imageSelected = null;
 
   final List<String> _titles = [
     "Seleccionar Prenda",
@@ -63,10 +66,19 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
   }
 
   void _onSubStepChanged(int index) {
+
+    print("index ${index}");
     setState(() {
       _subStepIndex = index;
       _appBarTitle = _subTitles[_subStepIndex];
     });
+  }
+
+  void _onImageSelected(File image) {
+    setState(() {
+      imageSelected = image;
+    });
+    // print(imageSelected.path);
   }
 
   void _onSubStepChanged_profile(int index) {
@@ -136,8 +148,10 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
           children: [
             HomePage(
               onSubStepChanged: _onSubStepChanged,
+              onImageSelected: _onImageSelected
             ),
             ClothImagePage(
+              image: imageSelected,
               onSubStepChanged: _onSubStepChanged,
             ),
             GenerateOutfitsPage(onSubStepChanged: _onSubStepChanged),

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 void showOverlay(BuildContext context, String message, Color? color) {
   OverlayState? overlayState = Overlay.of(context);
@@ -44,3 +47,15 @@ List<String> options = [
   'Femenino',
   'Prefiero no decirlo',
 ];
+
+Future<String> saveFile(File file) async {
+  final directory = await getApplicationDocumentsDirectory();
+  final filePath = '${directory.path}/${DateTime.now().toString()}.jpg';
+
+  try {
+    await file.copy(filePath);
+  } catch (e) {
+    print('Error al guardar el archivo: $e');
+  }
+  return filePath;
+}

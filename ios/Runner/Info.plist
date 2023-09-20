@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Demo Fashion App</string>
+	<string>FashionApp</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -45,5 +45,11 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>Esta aplicación requiere acceso a la ubicación cuando esté en uso.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Esta aplicación requiere acceso a la ubicación en todo momento.</string>
+
 </dict>
 </plist>
