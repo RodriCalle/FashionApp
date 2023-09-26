@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
           MaterialPageRoute(builder: (context) => ScaffoldComponent()),
         );
       } catch (e) {
-        showOverlay(context, e.toString(), Colors.red);
+        showOverlay(context, e.toString(), Colors.redAccent);
       }
     }
   }

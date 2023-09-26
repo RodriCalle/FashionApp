@@ -1,0 +1,22 @@
+Blazer
+Blouse
+Body
+Cardigan
+Denim
+Dress
+Hat
+Hoodie
+Jacket
+Leggings
+LongSleeve
+Outwear Jacket
+Pants
+Rompers Jumpsuits
+Shirt
+Shorts
+Skirt
+Suiting
+Sweater
+Top
+T-Shirt
+Undershirt

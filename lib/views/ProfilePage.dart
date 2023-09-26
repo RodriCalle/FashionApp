@@ -5,6 +5,7 @@ import 'package:demo_fashion_app/services/FirebaseService.dart';
 import 'package:demo_fashion_app/styles/BorderStyles.dart';
 import 'package:demo_fashion_app/styles/ColorStyles.dart';
 import 'package:demo_fashion_app/styles/TextStyles.dart';
+import 'package:demo_fashion_app/utils/lists.dart';
 import 'package:demo_fashion_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';

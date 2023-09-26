@@ -121,6 +121,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.1"
+  color_thief_dart:
+    dependency: "direct main"
+    description:
+      name: color_thief_dart
+      sha256: b3410cf809ca877e64b59b91a4a5e5eb2316ebe3d148b19ba1680eac2a08dc76
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
+  colornames:
+    dependency: "direct main"
+    description:
+      name: colornames
+      sha256: c42ee28edfc65391d7cdb40577c57390e1ea2ff78d73a9983a452a72dacfbdbc
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   convert:
     dependency: transitive
     description:
@@ -384,14 +400,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-  huawei_ml_image:
-    dependency: "direct main"
-    description:
-      name: huawei_ml_image
-      sha256: "2658fee55f67b99cd14c3f921b9d7b4bdc69e0acbf2abe78fd89d6a3a4fc766d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.11.0+300"
   image:
     dependency: transitive
     description:

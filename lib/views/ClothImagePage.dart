@@ -1,18 +1,45 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:color_thief_dart/color_thief_dart.dart';
+import 'package:colornames/colornames.dart';
+import 'package:demo_fashion_app/classes/ClothInfoDetail.dart';
+import 'package:demo_fashion_app/utils/image_utils.dart.dart';
 import 'package:flutter/material.dart';
+
 
 class ClothImagePage extends StatefulWidget {
   final File? image;
   final ValueChanged<int> onSubStepChanged;
+  final ValueChanged<File> onImageSelected;
+  final ValueChanged<ClothInfoDetail> onClothInfoDetail;
 
-  const ClothImagePage({Key? key, this.image, required this.onSubStepChanged}) : super(key: key);
+  ClothImagePage({Key? key, this.image,
+    required this.onSubStepChanged, required this.onImageSelected, required this.onClothInfoDetail})
+      : super(key: key);
 
   @override
   State<ClothImagePage> createState() => _ClothImagePageState();
 }
 
 class _ClothImagePageState extends State<ClothImagePage> {
+
+  void improveImage() async {
+    //final imgEnhanced = await processImageWithESRGAN(imageTemp);
+
+    ClothInfoDetail clothInfoDetail = ClothInfoDetail();
+    clothInfoDetail.type = await getImageClass(widget.image);
+    //var pathImageNoBg = await removeBackground(widget.image!);
+    //var pathImageNoBg2 = await removeBackground2(widget.image!);
+    //var pathImageNoBg2 = await removeBackground3(widget.image!);
+    clothInfoDetail.color = await getMainColorFromImage(widget.image!);
+    clothInfoDetail.material = "Cotton";
+    clothInfoDetail.style = "Casual";
+
+    widget.onImageSelected(widget.image!);
+    widget.onClothInfoDetail(clothInfoDetail);
+    widget.onSubStepChanged(2);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,22 +67,19 @@ class _ClothImagePageState extends State<ClothImagePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          decoration: BoxDecoration(
-                            border: Border.all()
-                          ),
+                          decoration: BoxDecoration(border: Border.all()),
                           height: 300,
                           width: 300,
                           child: widget.image == null
                               ? Image.asset(
-                            "assets/images/placeholder.jpg",
-                            width: bodyWidth * 0.6,
-                          )
+                                  "assets/images/placeholder.jpg",
+                                  width: bodyWidth * 0.6,
+                                )
                               : Image.file(
-                              this.widget.image!,
-                              fit: BoxFit.contain
-                          ),
+                                  this.widget.image!,
+                                  fit: BoxFit.contain
+                                ),
                         )
-
                       ],
                     ),
                     Row(
@@ -64,20 +88,17 @@ class _ClothImagePageState extends State<ClothImagePage> {
                         Container(
                           width: bodyWidth * 0.6,
                           child: MaterialButton(
-                              color: Color.fromRGBO(249,235,219, 1),
+                              color: Color.fromRGBO(249, 235, 219, 1),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
-                                  side: BorderSide.none
-                              ),
+                                  side: BorderSide.none),
                               child: const Padding(
                                 padding: EdgeInsets.all(12.0),
-                                child: Text(
-                                    "Mejorar Imagen",
+                                child: Text("Mejorar Imagen",
                                     style: TextStyle(
-                                        color: Colors.black, fontWeight: FontWeight.bold,
-                                        fontSize: 18
-                                    )
-                                ),
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
                               ),
                               onPressed: () {
                                 improveImage();
@@ -93,7 +114,4 @@ class _ClothImagePageState extends State<ClothImagePage> {
     });
   }
 
-  void improveImage() {
-    widget.onSubStepChanged(2);
-  }
 }

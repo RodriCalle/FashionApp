@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as img;
 
 void showOverlay(BuildContext context, String message, Color? color) {
   OverlayState? overlayState = Overlay.of(context);
@@ -42,20 +44,64 @@ void showOverlay(BuildContext context, String message, Color? color) {
 }
 
 
-List<String> options = [
-  'Masculino',
-  'Femenino',
-  'Prefiero no decirlo',
-];
-
 Future<String> saveFile(File file) async {
-  final directory = await getApplicationDocumentsDirectory();
-  final filePath = '${directory.path}/${DateTime.now().toString()}.jpg';
+  final directory = await getExternalStorageDirectory();
+  final filePath = '${directory?.path}/image_${DateTime.now().toString()}.jpg';
 
   try {
     await file.copy(filePath);
   } catch (e) {
     print('Error al guardar el archivo: $e');
   }
+  return filePath;
+}
+
+Future<String> saveBytesImageToFile(Uint8List bytes) async {
+  final directory = await getExternalStorageDirectory();
+  final now = DateTime.now();
+  final filePath = '${directory?.path}/image_${now.year}${now.month}${now.day}_${now.hour}${now.minute}${now.second}.jpg';
+
+  try {
+    final image = img.decodeImage(bytes);
+    if (image != null) {
+      File(filePath).writeAsBytesSync(img.encodeJpg(image));
+    }
+
+  } catch (e) {
+    print('Error al guardar el archivo: $e');
+  }
+  return filePath;
+}
+
+// saveBytesToPhone
+Future<String> saveBytesToPhone(Uint8List bytes) async {
+
+  final directory = await getExternalStorageDirectory();
+  final now = DateTime.now();
+  final filePath = '${directory?.path}/image_${now.year}${now.month}${now.day}_${now.hour}${now.minute}${now.second}.jpg';
+
+  try {
+    final file = File(filePath);
+    await file.writeAsBytes(bytes);
+  } catch (e) {
+    print('Error al guardar el archivo: $e');
+  }
+
+  return filePath;
+}
+
+//save txt and return path
+Future<String> saveTxt(String txt, [String? name]) async {
+  final directory = await getExternalStorageDirectory();
+  final now = DateTime.now();
+  final filePath = '${directory?.path}/${name ?? "txt"}_${now.year}${now.month}${now.day}_${now.hour}${now.minute}${now.second}.txt';
+
+  try {
+    final file = File(filePath);
+    await file.writeAsString(txt);
+  } catch (e) {
+    print('Error al guardar el archivo: $e');
+  }
+
   return filePath;
 }

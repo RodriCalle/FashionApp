@@ -1,10 +1,11 @@
 import 'package:demo_fashion_app/classes/Auth.dart';
 import 'package:demo_fashion_app/services/FirebaseService.dart';
 import 'package:demo_fashion_app/styles/TextStyles.dart';
+import 'package:demo_fashion_app/utils/lists.dart';
+import 'package:demo_fashion_app/utils/utils.dart';
 import 'package:demo_fashion_app/views/LoginPage.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/utils.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -46,9 +47,14 @@ class _SignUpPageState extends State<SignUpPage> {
         );
 
         // La cuenta se creó exitosamente, puedes realizar acciones adicionales.
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+        showOverlay(context, "Cuenta creada correctamente", Colors.lightGreen);
       } catch (e) {
         print("Error durante el registro: $e");
-        showOverlay(context, e.toString(), Colors.red);
+        showOverlay(context, e.toString(), Colors.redAccent);
       }
     }
   }

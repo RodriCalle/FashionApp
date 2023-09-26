@@ -25,6 +25,7 @@ class TemperatureService {
 
     if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
       await Geolocator.requestPermission();
+      await getTemperature();
     } else {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
@@ -40,7 +41,8 @@ class TemperatureService {
 
           temp = temperature.toString();
         } else {
-          throw Exception('Failed to load temperature data');
+          //throw Exception('Failed to load temperature data');
+          temp = "0";
         }
       } catch (e) {
         throw Exception('Error: $e');

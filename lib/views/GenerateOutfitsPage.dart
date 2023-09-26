@@ -1,14 +1,17 @@
 import 'dart:io';
 
+import 'package:demo_fashion_app/classes/ClothInfoDetail.dart';
 import 'package:demo_fashion_app/styles/ColorStyles.dart';
 import 'package:flutter/material.dart';
 
 class GenerateOutfitsPage extends StatefulWidget {
   final File? image;
   final ValueChanged<int> onSubStepChanged;
+  final ValueChanged<File> onImageSelected;
+  final ClothInfoDetail? clothInfoDetail;
 
-  const GenerateOutfitsPage(
-      {Key? key, this.image, required this.onSubStepChanged})
+  GenerateOutfitsPage(
+      {Key? key, this.image, required this.onSubStepChanged, required this.onImageSelected, this.clothInfoDetail})
       : super(key: key);
 
   @override
@@ -16,6 +19,16 @@ class GenerateOutfitsPage extends StatefulWidget {
 }
 
 class _GenerateOutfitsPageState extends State<GenerateOutfitsPage> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void generateOutfits() async {
+    widget.onSubStepChanged(3);
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -27,12 +40,6 @@ class _GenerateOutfitsPageState extends State<GenerateOutfitsPage> {
           Container(
               width: bodyWidth,
               height: bodyHeight,
-              /*decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.green,
-                  width: 2.0,
-                ),
-              ),*/
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -41,12 +48,20 @@ class _GenerateOutfitsPageState extends State<GenerateOutfitsPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        this.widget.image == null
-                            ? Image.asset(
-                                "assets/images/placeholder.jpg",
-                                width: bodyWidth * 0.6,
-                              )
-                            : Image.file(this.widget.image!)
+                        Container(
+                          decoration: BoxDecoration(border: Border.all()),
+                          height: 300,
+                          width: 300,
+                          child: widget.image == null
+                              ? Image.asset(
+                            "assets/images/placeholder.jpg",
+                            width: bodyWidth * 0.6,
+                          )
+                              : Image.file(
+                              this.widget.image!,
+                              fit: BoxFit.contain
+                          ),
+                        )
                       ],
                     ),
                     Row(
@@ -85,24 +100,36 @@ class _GenerateOutfitsPageState extends State<GenerateOutfitsPage> {
                                 borderRadius: BorderRadius.circular(10)),
                             padding: EdgeInsets.all(20),
                             width: bodyWidth * 0.6,
-                            child: const Column(
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   "Características",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15
+                                      fontSize: 17
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
-                                Text("Tipo: Polo Cuello Camisa"),
-                                Text("Color: negro"),
-                                Text("Material: Algodón"),
-                                Text("Estilo: Casual"),
+                                Text(
+                                  "Tipo: ${widget.clothInfoDetail == null ? "No se pudo detectar" : widget.clothInfoDetail?.type}",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                Text(
+                                  "Color: ${widget.clothInfoDetail == null ? "No se pudo detectar" : widget.clothInfoDetail?.color}",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                Text(
+                                  "Material: ${widget.clothInfoDetail == null ? "No se pudo detectar" : widget.clothInfoDetail?.material}",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                Text(
+                                  "Estilo: ${widget.clothInfoDetail == null ? "No se pudo detectar" : widget.clothInfoDetail?.style}",
+                                  style: TextStyle(fontSize: 15),
+                                ),
                               ],
                             ))
                       ],
@@ -113,9 +140,5 @@ class _GenerateOutfitsPageState extends State<GenerateOutfitsPage> {
         ],
       );
     });
-  }
-
-  void generateOutfits() {
-    widget.onSubStepChanged(3);
   }
 }

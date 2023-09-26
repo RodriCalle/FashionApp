@@ -43,11 +43,12 @@ dependencies:
   flutter_staggered_grid_view: ^0.7.0
   tflite_flutter: ^0.10.1
   tflite_flutter_helper_plus: ^0.0.2
-  huawei_ml_image: ^3.11.0+300
   geolocator: ^10.0.1
   http: ^1.1.0
   permission_handler: ^11.0.0
   firebase_storage: ^11.2.7
+  colornames: ^0.1.0
+  color_thief_dart: ^0.1.0
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +76,7 @@ flutter:
   assets:
     - assets/images/
     - assets/models/
+    - assets/models/ClothClassification/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

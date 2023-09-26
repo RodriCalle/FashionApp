@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  File? image;
+  late File image;
   Account loggedInUser = Account();
   String temperature = "0";
 
@@ -37,20 +37,13 @@ class _HomePageState extends State<HomePage> {
     // print(loggedInUser.names);
   }
 
-
   Future pickImageFromGallery() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
       final imageTemp = File(image.path);
-      setState(() => this.image = imageTemp);
 
-      //processImageWithESRGAN(imageTemp);
-      // await saveFile(imageTemp);
-      //await applySuperResolution(imageTemp);
-
-      widget.onImageSelected(imageTemp);
-      widget.onSubStepChanged(1);
+      await nextScreen(imageTemp);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
@@ -61,14 +54,17 @@ class _HomePageState extends State<HomePage> {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
       if (image == null) return;
       final imageTemp = File(image.path);
-      setState(() => this.image = imageTemp);
 
-      widget.onImageSelected(imageTemp);
-      widget.onSubStepChanged(1);
-      //processImageWithESRGAN(imageTemp);
+      await nextScreen(imageTemp);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
+  }
+
+  Future nextScreen(File imgEnhanced) async {
+    setState(() => this.image = imgEnhanced);
+    widget.onImageSelected(imgEnhanced);
+    widget.onSubStepChanged(1);
   }
 
   @override
@@ -193,7 +189,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Container(
                       width: bodyWidth * 0.6,
-                      child: Text("La imagen debe ser nitida, y debe mostrar una prenda de vestir.")
+                      child: Text(
+                        "La imagen debe ser nítida, y debe mostrar una prenda de vestir.",
+                        textAlign: TextAlign.center,
+                      )
                   )
                 ],
               ),
