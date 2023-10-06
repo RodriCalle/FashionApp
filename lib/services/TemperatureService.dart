@@ -32,21 +32,21 @@ class TemperatureService {
       final Uri uri = Uri.parse(
           '$baseUrl&lat=${position.latitude.toString()}&lon=${position.longitude.toString()}&key=$apiKey');
       print(uri.toString());
-      try {
-        final response = await http.get(uri);
-
-        if (response.statusCode == 200) {
-          final jsonData = json.decode(response.body);
-          final temperature = jsonData['data'][0]['temp'];
-
-          temp = temperature.toString();
-        } else {
-          //throw Exception('Failed to load temperature data');
-          temp = "0";
-        }
-      } catch (e) {
-        throw Exception('Error: $e');
-      }
+      // try {
+      //   final response = await http.get(uri);
+      //
+      //   if (response.statusCode == 200) {
+      //     final jsonData = json.decode(response.body);
+      //     final temperature = jsonData['data'][0]['temp'];
+      //
+      //     temp = temperature.toString();
+      //   } else {
+      //     //throw Exception('Failed to load temperature data');
+      //     temp = "0";
+      //   }
+      // } catch (e) {
+      //   throw Exception('Error: $e');
+      // }
     }
     return temp;
   }

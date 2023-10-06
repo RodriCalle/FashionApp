@@ -49,6 +49,8 @@ dependencies:
   firebase_storage: ^11.2.7
   colornames: ^0.1.0
   color_thief_dart: ^0.1.0
+  huawei_ml_image:
+    path: D:\Techs\huawei_ml_image
 
 dev_dependencies:
   flutter_test:

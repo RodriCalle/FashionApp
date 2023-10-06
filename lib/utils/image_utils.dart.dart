@@ -4,12 +4,9 @@ import 'dart:typed_data';
 import 'package:color_thief_dart/color_thief_dart.dart';
 import 'package:colornames/colornames.dart';
 import 'package:demo_fashion_app/utils/utils.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:huawei_ml_image/huawei_ml_image.dart';
 import 'package:tflite_flutter/tflite_flutter.dart' as tflite;
 import 'package:image/image.dart' as img;
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
-import 'package:path/path.dart';
 import 'package:tflite_flutter_helper_plus/tflite_flutter_helper_plus.dart';
 import 'package:tflite_flutter_plus/src/bindings/types.dart';
 import 'dart:ui' as ui;
@@ -107,13 +104,6 @@ Future<String> getImageClass(File? inputImageFile) async {
   return labels[maxIndex];
 }
 
-/*Future<String> getImageColor(File? inputImageFile) async {
-  // file to image
-  final image = img.decodeImage(inputImageFile?.readAsBytesSync() as List<int>)!;
-  // get color from image
-  var color = getColorFromImage(image, 1);
-}*/
-
 Future<String> getMainColorFromImage(File? file) async {
 
   final bytes = await file!.readAsBytes();
@@ -124,98 +114,50 @@ Future<String> getMainColorFromImage(File? file) async {
 
   List<int> thiefColor = await getColorFromImage(image, 10) ?? [0, 0, 0];
 
-  print(thiefColor);
   var color = img.Color.fromRgb(thiefColor[0], thiefColor[1], thiefColor[2]);
 
   return color.colorName;
 }
 
-Future<String> removeBackground(File inputImage) async {
-  var apiKey = "GVwSVQzvbhMfRqZL6G1jvTnM";
-  var path = "";
+Future<String> getClass(File imageFile) async {
+  // Create an MLImageClassificationAnalyzer object.
+  MLImageClassificationAnalyzer analyzer = new MLImageClassificationAnalyzer();
 
-  final imageBytes = await inputImage.readAsBytes();
+// Create an MLClassificationAnalyzerSetting object to configure the recognition.
+  final setting = MLClassificationAnalyzerSetting.create(path: imageFile.path, isRemote: false);
 
-  final response = await http.post(
-    Uri.parse('https://api.remove.bg/v1.0/removebg'),
-    headers: {
-      'X-Api-Key': apiKey,
-    },
-    body: imageBytes,
-  );
+// Get the classification results asynchronously.
+  List<MLImageClassification> list = await analyzer.asyncAnalyseFrame(setting);
 
-  if (response.statusCode == 200) {
-    final outputImageBytes = response.bodyBytes;
-    path = await saveBytesImageToFile(outputImageBytes);
-  } else {
-    // Maneja el error aquí
-    print('Error al eliminar el fondo: ${response.statusCode}');
-  }
+// After the recognition ends, stop classification.
+  bool result = await analyzer.stop();
 
-  return path;
+  print(list);
+
+  return "";
 }
 
-Future<String> removeBackground2(File file) async {
-  final apiKey = "Basic MTc2MDc6dG1hYjRqMTJvOHVlMGUxYWdwMG9qMDFmcThjcG0zcmk0bTU4aXIzaXE4c2ZpdXNrZGY4dA==";
-  var path = "";
-  final uri = Uri.parse("https://clippingmagic.com/api/v1/images");
 
-  final request = http.MultipartRequest('POST', uri)
-    ..headers['Authorization'] = apiKey
-    ..fields['format'] = 'result'
-    ..fields['test'] = 'true';
+Future<String> improveImageWithHuawei(File inputImageFile) async {
 
-  final fileStream = http.ByteStream(file.openRead());
-  final fileLength = await file.length();
 
-  final fileName = basename(file.path);
+  final MLImageSuperResolutionAnalyzer analyzer = MLImageSuperResolutionAnalyzer();
 
-  request.files.add(http.MultipartFile(
-    'image',
-    fileStream,
-    fileLength,
-    filename: fileName,
-    contentType: MediaType('image', 'jpg'),
-  ));
+  final MLImageSuperResolutionAnalyzerSetting  setting = MLImageSuperResolutionAnalyzerSetting.create(path: inputImageFile.path);
 
-  final response = await request.send();
+  MLImageSuperResolutionResult result = await analyzer.asyncAnalyseFrame(setting);
 
-  if (response.statusCode == 200) {
-    final responseData = await response.stream.toBytes();
-    path = await saveBytesImageToFile(responseData);
+  if (result.bytes != null) {
+    print("si hay bytes");
+    print(result);
+    print(result.bytes);
+    var url = await saveBytesToPhone(result.bytes!);
+    print(url);
   } else {
-    print("Request Failed: Status: ${response.statusCode}, Reason: ${response.reasonPhrase}");
+    print("no hay bytes");
   }
 
-  return path;
-}
+  await analyzer.stop();
 
-Future<String> removeBackground3(File imageFile) async {
-  var path = "";
-  final url = Uri.parse("https://api.removal.ai/3.0/remove");
-  final headers = {
-    'Rm-Token': '6513265b2874e6.77515485',
-  };
-
-  final request = http.MultipartRequest('POST', url)
-    ..headers.addAll(headers)
-    ..files.add(await http.MultipartFile.fromPath(
-      'image_file',
-      imageFile.path,
-      contentType: MediaType('image', 'jpg'),
-    ));
-
-  try {
-    final response = await request.send();
-    if (response.statusCode == 200) {
-      final responseBody = await response.stream.toBytes();
-      path = await saveBytesImageToFile(responseBody);
-    } else {
-      print("Request Failed: Status: ${response.statusCode}, Reason: ${response.reasonPhrase}");
-    }
-  } catch (e) {
-    print("Error: $e");
-  }
-
-  return path;
+  return "";
 }

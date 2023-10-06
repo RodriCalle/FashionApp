@@ -1,8 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:color_thief_dart/color_thief_dart.dart';
-import 'package:colornames/colornames.dart';
 import 'package:demo_fashion_app/classes/ClothInfoDetail.dart';
 import 'package:demo_fashion_app/utils/image_utils.dart.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +23,10 @@ class _ClothImagePageState extends State<ClothImagePage> {
 
   void improveImage() async {
     //final imgEnhanced = await processImageWithESRGAN(imageTemp);
-
+    //final path = await improveImageWithHuawei(widget.image!);
     ClothInfoDetail clothInfoDetail = ClothInfoDetail();
     clothInfoDetail.type = await getImageClass(widget.image);
+    // await getClass(widget.image!);
     //var pathImageNoBg = await removeBackground(widget.image!);
     //var pathImageNoBg2 = await removeBackground2(widget.image!);
     //var pathImageNoBg2 = await removeBackground3(widget.image!);
