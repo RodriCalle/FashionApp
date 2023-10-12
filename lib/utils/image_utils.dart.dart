@@ -119,7 +119,8 @@ Future<String> getMainColorFromImage(File? file) async {
   return color.colorName;
 }
 
-Future<String> getClass(File imageFile) async {
+/* Huawei package */
+Future<String> getClassWithHuawei(File imageFile) async {
   // Create an MLImageClassificationAnalyzer object.
   MLImageClassificationAnalyzer analyzer = new MLImageClassificationAnalyzer();
 
@@ -136,7 +137,6 @@ Future<String> getClass(File imageFile) async {
 
   return "";
 }
-
 
 Future<String> improveImageWithHuawei(File inputImageFile) async {
 

@@ -23,13 +23,8 @@ class _ClothImagePageState extends State<ClothImagePage> {
 
   void improveImage() async {
     //final imgEnhanced = await processImageWithESRGAN(imageTemp);
-    //final path = await improveImageWithHuawei(widget.image!);
     ClothInfoDetail clothInfoDetail = ClothInfoDetail();
     clothInfoDetail.type = await getImageClass(widget.image);
-    // await getClass(widget.image!);
-    //var pathImageNoBg = await removeBackground(widget.image!);
-    //var pathImageNoBg2 = await removeBackground2(widget.image!);
-    //var pathImageNoBg2 = await removeBackground3(widget.image!);
     clothInfoDetail.color = await getMainColorFromImage(widget.image!);
     clothInfoDetail.material = "Cotton";
     clothInfoDetail.style = "Casual";
