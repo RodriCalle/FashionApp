@@ -114,6 +114,7 @@ Future<String> getMainColorFromImage(File? file) async {
 
   List<int> thiefColor = await getColorFromImage(image, 10) ?? [0, 0, 0];
 
+  print(thiefColor);
   var color = img.Color.fromRgb(thiefColor[0], thiefColor[1], thiefColor[2]);
 
   return color.colorName;

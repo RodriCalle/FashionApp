@@ -37,6 +37,22 @@ class _HomePageState extends State<HomePage> {
     // print(loggedInUser.names);
   }
 
+  IconData getIconFromTemperature() {
+    print(temperature);
+    if(int.parse(temperature) < -5)
+      return Icons.ac_unit;
+    else if(int.parse(temperature) >= -5 && int.parse(temperature) < 10)
+      return Icons.cloud;
+    else if(int.parse(temperature) >= 10 && int.parse(temperature) < 20)
+      return Icons.cloud_queue;
+    else if(int.parse(temperature) >= 20 && int.parse(temperature) < 30)
+      return Icons.sunny;
+    else if(int.parse(temperature) >= 30)
+      return Icons.whatshot;
+
+    return Icons.sunny;
+  }
+
   Future pickImageFromGallery() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -130,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                     margin: EdgeInsets.symmetric(horizontal: 20),
                   ),
                   Icon(
-                    Icons.sunny,
+                    getIconFromTemperature(),
                     size: 60,
                   ),
                 ],

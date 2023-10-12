@@ -14,25 +14,25 @@ class MyClothesPage extends StatefulWidget {
 class _MyClothesPageState extends State<MyClothesPage> {
   List<ClientCloth> clothList = [
     ClientCloth(
-        name: 'Polo camisero 1',
+        name: 'Polo Azul Casual',
         imgUrl:
-            'https://hmperu.vtexassets.com/arquivos/ids/3328203/Polo-camisero-de-deporte-en-pique---Negro---H-M-PE.jpg?v=1778514266'),
+            'https://scontent.flim1-2.fna.fbcdn.net/v/t1.6435-9/75223838_2526949124040686_8625086322337382400_n.jpg?stp=dst-jpg_p843x403&_nc_cat=106&ccb=1-7&_nc_sid=7f8c78&_nc_ohc=ZKnR7JbR2mcAX-xzuDb&_nc_ht=scontent.flim1-2.fna&oh=00_AfB53GzuPZnrqfaYT2RplcMXTGUa76HqUAT-n1uFXrKtVw&oe=654FABD1'),
     ClientCloth(
-        name: 'Polo camisero 2',
+        name: 'Shor Negro Deportivo',
         imgUrl:
-            'https://hmperu.vtexassets.com/arquivos/ids/3328203/Polo-camisero-de-deporte-en-pique---Negro---H-M-PE.jpg?v=1778514266'),
+            'https://http2.mlstatic.com/D_NQ_NP_621182-MPE47528955604_092021-O.webp'),
     ClientCloth(
         name: 'Polo camisero 3',
         imgUrl:
             'https://hmperu.vtexassets.com/arquivos/ids/3328203/Polo-camisero-de-deporte-en-pique---Negro---H-M-PE.jpg?v=1778514266'),
     ClientCloth(
-        name: 'Polo camisero 4',
+        name: 'Camisa Blanca Formal',
         imgUrl:
-            'https://hmperu.vtexassets.com/arquivos/ids/3328203/Polo-camisero-de-deporte-en-pique---Negro---H-M-PE.jpg?v=1778514266'),
+            'https://harleydavidsonlima.com/wp-content/uploads/2017/09/99047_16VMF_WH_T.jpg'),
     ClientCloth(
-        name: 'Polo camisero 5',
+        name: 'Pantalón Jean',
         imgUrl:
-            'https://hmperu.vtexassets.com/arquivos/ids/3328203/Polo-camisero-de-deporte-en-pique---Negro---H-M-PE.jpg?v=1778514266'),
+            'https://hmperu.vtexassets.com/arquivos/ids/3788170-483-725/Regular-Jeans---Azul-denim-claro---H-M-PE.jpg?v=638265673275130000'),
   ];
 
   @override

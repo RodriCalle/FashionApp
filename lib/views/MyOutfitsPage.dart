@@ -20,15 +20,15 @@ class _MyOutfitsPageState extends State<MyOutfitsPage> {
     ClothInfo(
         name: 'Conjunto 2',
         image:
-            'https://thumbs.dreamstime.com/b/joven-en-traje-de-mezclilla-guapo-hombre-con-chaqueta-y-jeans-sobre-fondo-blanco-foto-para-publicidad-mens-los-hombres-chaquetas-207855357.jpg'),
+            'https://hmperu.vtexassets.com/arquivos/ids/3289579-483-725/Loose-Jeans---Denim-blue---H-M-PE.jpg?v=638080789991570000'),
     ClothInfo(
         name: 'Conjunto 3',
         image:
-            'https://thumbs.dreamstime.com/b/joven-en-traje-de-mezclilla-guapo-hombre-con-chaqueta-y-jeans-sobre-fondo-blanco-foto-para-publicidad-mens-los-hombres-chaquetas-207855357.jpg'),
+            'https://http2.mlstatic.com/D_NQ_NP_702623-MLC49365086260_032022-O.webp'),
     ClothInfo(
         name: 'Conjunto 4',
         image:
-            'https://thumbs.dreamstime.com/b/joven-en-traje-de-mezclilla-guapo-hombre-con-chaqueta-y-jeans-sobre-fondo-blanco-foto-para-publicidad-mens-los-hombres-chaquetas-207855357.jpg'),
+            'https://hmperu.vtexassets.com/arquivos/ids/3787717-483-725/Regular-Tapered-Jeans---Negro-No-fade-black---H-M-PE.jpg?v=638265670132530000'),
   ];
 
   @override
