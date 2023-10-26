@@ -1,5 +1,5 @@
-import 'package:demo_fashion_app/classes/Auth.dart';
-import 'package:demo_fashion_app/services/FirebaseService.dart';
+import 'package:demo_fashion_app/classes/auth.dart';
+import 'package:demo_fashion_app/services/firebase_service.dart';
 import 'package:demo_fashion_app/styles/TextStyles.dart';
 import 'package:demo_fashion_app/utils/lists.dart';
 import 'package:demo_fashion_app/utils/utils.dart';

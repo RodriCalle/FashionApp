@@ -1,4 +1,4 @@
-import 'package:demo_fashion_app/classes/ClientCloth.dart';
+import 'package:demo_fashion_app/classes/cloth_info.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/material.dart';
 
@@ -12,24 +12,24 @@ class MyClothesPage extends StatefulWidget {
 }
 
 class _MyClothesPageState extends State<MyClothesPage> {
-  List<ClientCloth> clothList = [
-    ClientCloth(
+  List<ClothInformation> clothList = [
+    ClothInformation(
         name: 'Polo Azul Casual',
         imgUrl:
             'https://scontent.flim1-2.fna.fbcdn.net/v/t1.6435-9/75223838_2526949124040686_8625086322337382400_n.jpg?stp=dst-jpg_p843x403&_nc_cat=106&ccb=1-7&_nc_sid=7f8c78&_nc_ohc=ZKnR7JbR2mcAX-xzuDb&_nc_ht=scontent.flim1-2.fna&oh=00_AfB53GzuPZnrqfaYT2RplcMXTGUa76HqUAT-n1uFXrKtVw&oe=654FABD1'),
-    ClientCloth(
+    ClothInformation(
         name: 'Shor Negro Deportivo',
         imgUrl:
             'https://http2.mlstatic.com/D_NQ_NP_621182-MPE47528955604_092021-O.webp'),
-    ClientCloth(
+    ClothInformation(
         name: 'Polo camisero 3',
         imgUrl:
             'https://hmperu.vtexassets.com/arquivos/ids/3328203/Polo-camisero-de-deporte-en-pique---Negro---H-M-PE.jpg?v=1778514266'),
-    ClientCloth(
+    ClothInformation(
         name: 'Camisa Blanca Formal',
         imgUrl:
             'https://harleydavidsonlima.com/wp-content/uploads/2017/09/99047_16VMF_WH_T.jpg'),
-    ClientCloth(
+    ClothInformation(
         name: 'Pantalón Jean',
         imgUrl:
             'https://hmperu.vtexassets.com/arquivos/ids/3788170-483-725/Regular-Jeans---Azul-denim-claro---H-M-PE.jpg?v=638265673275130000'),
@@ -42,7 +42,7 @@ class _MyClothesPageState extends State<MyClothesPage> {
         crossAxisCount: 2,
         itemCount: clothList.length,
         itemBuilder: (context, index) {
-          ClientCloth clientClothInfo = clothList[index];
+          ClothInformation clientClothInfo = clothList[index];
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,

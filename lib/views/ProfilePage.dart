@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:demo_fashion_app/classes/Auth.dart';
-import 'package:demo_fashion_app/services/FirebaseService.dart';
+import 'package:demo_fashion_app/classes/auth.dart';
+import 'package:demo_fashion_app/services/firebase_service.dart';
 import 'package:demo_fashion_app/styles/BorderStyles.dart';
 import 'package:demo_fashion_app/styles/ColorStyles.dart';
 import 'package:demo_fashion_app/styles/TextStyles.dart';

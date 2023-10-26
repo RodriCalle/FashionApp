@@ -1,4 +1,4 @@
-import 'package:demo_fashion_app/classes/CreditCardAcount.dart';
+import 'package:demo_fashion_app/classes/credit_card.dart';
 import 'package:demo_fashion_app/styles/ButtonStyles.dart';
 import 'package:flutter/material.dart';
 

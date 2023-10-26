@@ -1,4 +1,4 @@
-import 'package:demo_fashion_app/classes/Auth.dart';
+import 'package:demo_fashion_app/classes/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Guardar información del usuario logueado

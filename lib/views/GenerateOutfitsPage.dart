@@ -123,7 +123,7 @@ class _GenerateOutfitsPageState extends State<GenerateOutfitsPage> {
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 Text(
-                                  "Material: ${widget.clothInfoDetail == null ? "No se pudo detectar" : widget.clothInfoDetail?.material}",
+                                  "Temporada: ${widget.clothInfoDetail == null ? "No se pudo detectar" : widget.clothInfoDetail?.season}",
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 Text(

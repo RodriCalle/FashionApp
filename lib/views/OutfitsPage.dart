@@ -1,6 +1,7 @@
-import 'package:demo_fashion_app/classes/ClothInfo.dart';
 import 'package:demo_fashion_app/styles/ColorStyles.dart';
 import 'package:flutter/material.dart';
+
+import '../classes/cloth_info.dart';
 
 class OutfitsPage extends StatefulWidget {
   const OutfitsPage({Key? key}) : super(key: key);
@@ -10,13 +11,27 @@ class OutfitsPage extends StatefulWidget {
 }
 
 class _OutfitsPageState extends State<OutfitsPage> {
-  List<ClothInfo> clothList = [
-    ClothInfo(name: 'Camisa', image: 'https://urbandexmen.com/wp-content/uploads/2022/04/modelo-polo-negro-con-franja.jpg'),
-    ClothInfo(name: 'Camisa', image: 'https://urbandexmen.com/wp-content/uploads/2022/04/modelo-polo-negro-con-franja.jpg'),
-    ClothInfo(name: 'Camisa', image: 'https://urbandexmen.com/wp-content/uploads/2022/04/modelo-polo-negro-con-franja.jpg'),
-    ClothInfo(name: 'Camisa', image: 'https://urbandexmen.com/wp-content/uploads/2022/04/modelo-polo-negro-con-franja.jpg'),
-    ClothInfo(name: 'Camisa', image: 'https://urbandexmen.com/wp-content/uploads/2022/04/modelo-polo-negro-con-franja.jpg'),
-    ClothInfo(name: 'Camisa', image: 'https://urbandexmen.com/wp-content/uploads/2022/04/modelo-polo-negro-con-franja.jpg'),
+  List<ClothInformation> clothList = [
+    // polo negro
+    /*ClothInformation(name: 'Outfit 1', image: 'https://versach.pe/wp-content/uploads/2023/04/VRS_-_MODELO_FLORIAN-016-600x900.png'),
+    ClothInformation(name: 'Outfit 2', image: 'https://dg4uqybrelzrk.cloudfront.net/drago.pe/image/100007184/100007184-2.png'),
+    ClothInformation(name: 'Outfit 3', image: 'https://i.pinimg.com/564x/50/32/8b/50328b893d8f0a8d073c4c67d91ce181.jpg'),
+    ClothInformation(name: 'Outfit 4', image: 'https://i0.wp.com/deuniformes.es/wp-content/uploads/2020/07/852600-001-delante.jpg?fit=2048%2C2048&ssl=1'),
+    ClothInformation(name: 'Outfit 5', image: 'https://i.pinimg.com/564x/12/5e/6d/125e6d9dc03cbcf29121f88653fa4e59.jpg'),
+    ClothInformation(name: 'Outfit 6', image: 'https://www.octodenim.com/1215-large_default/polo-cuello-daniel-negro.jpg'),*/
+
+    // polo azul basico
+   /* ClothInformation(name: 'Outfit 1', image: 'https://falabella.scene7.com/is/image/FalabellaPE/19915218_4?wid=800&hei=800&qlt=70'),
+    ClothInformation(name: 'Outfit 2', image: 'https://falabella.scene7.com/is/image/FalabellaPE/882839951_4?wid=800&hei=800&qlt=70'),
+    ClothInformation(name: 'Outfit 3', image: 'https://falabella.scene7.com/is/image/FalabellaPE/19938407_3?wid=800&hei=800&qlt=70'),
+    ClothInformation(name: 'Outfit 4', image: 'https://falabella.scene7.com/is/image/FalabellaPE/19813217_4?wid=800&hei=800&qlt=70'),
+    ClothInformation(name: 'Outfit 5', image: 'https://falabella.scene7.com/is/image/FalabellaPE/19802607_4?wid=800&hei=800&qlt=70'),*/
+
+    // jogger plomo
+    ClothInformation(name: 'Outfit 1', imgUrl: 'https://home.ripley.com.pe/Attachment/WOP_5/2016288919451/2016288919451-4.jpg'),
+    ClothInformation(name: 'Outfit 2', imgUrl: 'https://falabella.scene7.com/is/image/FalabellaPE/882836575_4?wid=1004&hei=1500&crop=248,0,1004,1500&qlt=70'),
+    ClothInformation(name: 'Outfit 3', imgUrl: 'https://falabella.scene7.com/is/image/FalabellaPE/882834407_1?wid=1004&hei=1500&crop=248,0,1004,1500&qlt=70'),
+    ClothInformation(name: 'Outfit 4', imgUrl: "https://images.asos-media.com/products/joggers-de-polar-de-umbro/7763372-4?\$n_320w\$&wid=317&fit=constrain"),
   ];
 
   OutlineInputBorder border = OutlineInputBorder(
@@ -53,7 +68,7 @@ class _OutfitsPageState extends State<OutfitsPage> {
               child: ListView.builder(
                 itemCount: clothList.length,
                 itemBuilder: (context, index) {
-                  ClothInfo clothInfo = clothList[index];
+                  ClothInformation clothInfo = clothList[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
                     child: Container(
@@ -69,7 +84,7 @@ class _OutfitsPageState extends State<OutfitsPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image.network(
-                                clothInfo.image,
+                                clothInfo.imgUrl,
                                 height: 130,
                               ),
                             ],

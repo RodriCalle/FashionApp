@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:demo_fashion_app/classes/Auth.dart';
-import 'package:demo_fashion_app/services/FirebaseService.dart';
-import 'package:demo_fashion_app/services/TemperatureService.dart';
+import 'package:demo_fashion_app/classes/auth.dart';
+import 'package:demo_fashion_app/services/firebase_service.dart';
+import 'package:demo_fashion_app/services/temperature_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,16 +38,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   IconData getIconFromTemperature() {
-    print(temperature);
-    if(int.parse(temperature) < -5)
+    if(double.parse(temperature) < -5)
       return Icons.ac_unit;
-    else if(int.parse(temperature) >= -5 && int.parse(temperature) < 10)
+    else if(double.parse(temperature) >= -5 && int.parse(temperature) < 10)
       return Icons.cloud;
-    else if(int.parse(temperature) >= 10 && int.parse(temperature) < 20)
+    else if(double.parse(temperature) >= 10 && int.parse(temperature) < 20)
       return Icons.cloud_queue;
-    else if(int.parse(temperature) >= 20 && int.parse(temperature) < 30)
+    else if(double.parse(temperature) >= 20 && int.parse(temperature) < 30)
       return Icons.sunny;
-    else if(int.parse(temperature) >= 30)
+    else if(double.parse(temperature) >= 30)
       return Icons.whatshot;
 
     return Icons.sunny;

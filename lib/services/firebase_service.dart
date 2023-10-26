@@ -1,7 +1,7 @@
 
 import 'dart:io';
 
-import 'package:demo_fashion_app/classes/Auth.dart';
+import 'package:demo_fashion_app/classes/auth.dart';
 import 'package:demo_fashion_app/utils/shared_preferences_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

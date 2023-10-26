@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:demo_fashion_app/classes/ClothInfoDetail.dart';
-import 'package:demo_fashion_app/utils/image_utils.dart.dart';
+import 'package:demo_fashion_app/services/outfit_service.dart';
 import 'package:flutter/material.dart';
 
 
@@ -20,18 +20,24 @@ class ClothImagePage extends StatefulWidget {
 }
 
 class _ClothImagePageState extends State<ClothImagePage> {
+  bool isLoading = false;
 
   void improveImage() async {
+    setState(() {
+      isLoading = true;
+    });
+
     //final imgEnhanced = await processImageWithESRGAN(imageTemp);
     ClothInfoDetail clothInfoDetail = ClothInfoDetail();
-    clothInfoDetail.type = await getImageClass(widget.image);
-    clothInfoDetail.color = await getMainColorFromImage(widget.image!);
-    clothInfoDetail.material = "Cotton";
-    clothInfoDetail.style = "Casual";
+    clothInfoDetail = await getClothInfo(widget.image);
 
     widget.onImageSelected(widget.image!);
     widget.onClothInfoDetail(clothInfoDetail);
     widget.onSubStepChanged(2);
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -40,7 +46,7 @@ class _ClothImagePageState extends State<ClothImagePage> {
       double bodyHeight = constraints.maxHeight;
       double bodyWidth = constraints.maxWidth;
 
-      return Row(
+      return !isLoading ? Row(
         children: [
           Container(
               width: bodyWidth,
@@ -103,6 +109,8 @@ class _ClothImagePageState extends State<ClothImagePage> {
                 ),
               )),
         ],
+      ) : const Center(
+        child: CircularProgressIndicator(),
       );
     });
   }

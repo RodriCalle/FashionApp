@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-import '../classes/ClothInfo.dart';
+import '../classes/cloth_info.dart';
 
 class MyOutfitsPage extends StatefulWidget {
   final ValueChanged<int> onSubStepChanged;
@@ -12,22 +12,22 @@ class MyOutfitsPage extends StatefulWidget {
 }
 
 class _MyOutfitsPageState extends State<MyOutfitsPage> {
-  List<ClothInfo> clothList = [
-    ClothInfo(
+  List<ClothInformation> clothList = [
+    ClothInformation(
         name: 'Conjunto 1',
-        image:
+        imgUrl:
             'https://thumbs.dreamstime.com/b/joven-en-traje-de-mezclilla-guapo-hombre-con-chaqueta-y-jeans-sobre-fondo-blanco-foto-para-publicidad-mens-los-hombres-chaquetas-207855357.jpg'),
-    ClothInfo(
+    ClothInformation(
         name: 'Conjunto 2',
-        image:
+        imgUrl:
             'https://hmperu.vtexassets.com/arquivos/ids/3289579-483-725/Loose-Jeans---Denim-blue---H-M-PE.jpg?v=638080789991570000'),
-    ClothInfo(
+    ClothInformation(
         name: 'Conjunto 3',
-        image:
+        imgUrl:
             'https://http2.mlstatic.com/D_NQ_NP_702623-MLC49365086260_032022-O.webp'),
-    ClothInfo(
+    ClothInformation(
         name: 'Conjunto 4',
-        image:
+        imgUrl:
             'https://hmperu.vtexassets.com/arquivos/ids/3787717-483-725/Regular-Tapered-Jeans---Negro-No-fade-black---H-M-PE.jpg?v=638265670132530000'),
   ];
 
@@ -38,7 +38,7 @@ class _MyOutfitsPageState extends State<MyOutfitsPage> {
         crossAxisCount: 2,
         itemCount: clothList.length,
         itemBuilder: (context, index) {
-          ClothInfo clientOutfitInfo = clothList[index];
+          ClothInformation clientOutfitInfo = clothList[index];
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +51,7 @@ class _MyOutfitsPageState extends State<MyOutfitsPage> {
                         padding:
                             const EdgeInsets.only(top: 18, left: 12, right: 18),
                         child: Image.network(
-                          clientOutfitInfo.image,
+                          clientOutfitInfo.imgUrl,
                           height: 135,
                           width: 130,
                           fit: BoxFit.cover,
