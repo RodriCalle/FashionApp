@@ -180,6 +180,7 @@ class FirebaseService {
       if (userDoc.exists) {
         final userData = userDoc.data() as Map<String, dynamic>;
         List<dynamic> favorites = userData['favoritesOutfits'] ?? [];
+        outfit.favorite = true;
         favorites.add(outfit.toMapSave());
         await _firestore.collection('users').doc(userId).update({
           'favoritesOutfits': favorites,
