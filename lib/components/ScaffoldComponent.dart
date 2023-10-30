@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:demo_fashion_app/classes/ClothInfoDetail.dart';
-import 'package:demo_fashion_app/classes/cloth_info.dart';
+import 'package:demo_fashion_app/classes/cloth_information.dart';
 import 'package:demo_fashion_app/components/AppBarComponent.dart';
 import 'package:demo_fashion_app/views/ClothImagePage.dart';
 import 'package:demo_fashion_app/views/GenerateOutfitsPage.dart';
@@ -15,6 +14,8 @@ import 'package:demo_fashion_app/views/SubscriptionPage.dart';
 import 'package:demo_fashion_app/utils/lists.dart';
 import 'package:flutter/material.dart';
 
+import '../classes/outfit_response.dart';
+
 class ScaffoldComponent extends StatefulWidget {
   const ScaffoldComponent({Key? key}) : super(key: key);
 
@@ -27,8 +28,8 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
   int _subStepIndex = 0;
   late String _appBarTitle = "Seleccionar Prenda";
   File? imageSelected;
-  ClothInfoDetail clothInfoDetail = ClothInfoDetail();
-  List<ClothInformation> listClothInformation = [];
+  ClothInformation clothInfoDetail = ClothInformation();
+  List<OutfitResponse> listClothInformation = [];
 
   @override
   void initState() {
@@ -60,13 +61,13 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
     });
   }
 
-  void _onClothInfoDetail(ClothInfoDetail clothInfoD) {
+  void _onClothInfoDetail(ClothInformation clothInfoD) {
     setState(() {
       clothInfoDetail = clothInfoD;
     });
   }
 
-  void _onListClothInformation(List<ClothInformation> list) {
+  void _onListClothInformation(List<OutfitResponse> list) {
     setState(() {
       listClothInformation = list;
     });

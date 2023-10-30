@@ -20,4 +20,17 @@ Future<Account> getUserLoggedIn() async {
   return Account(id: userId, names: userName, email: userEmail);
 }
 
+// Guardar la temperatura
+Future<void> saveTemperature(String temperature) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('temperature', temperature);
+}
+
+// Recuperar la temperatura
+Future<String> getTemperature() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String temperature = prefs.getString('temperature') ?? '22';
+  return temperature;
+}
+
 

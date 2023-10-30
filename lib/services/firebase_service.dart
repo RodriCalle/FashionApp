@@ -1,11 +1,16 @@
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:demo_fashion_app/classes/auth.dart';
+import 'package:demo_fashion_app/classes/cloth_information.dart';
 import 'package:demo_fashion_app/utils/shared_preferences_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import '../classes/outfit_response.dart';
+import '../utils/utils.dart';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -156,6 +161,173 @@ class FirebaseService {
     }
   }
 
+  // outfit images
+  Future<bool> uploadOutfitImage(OutfitResponse outfit) async {
+    Account account = await getUserLoggedIn();
+    String userId = account.id;
 
+    File imageFile = await saveBytesImageToTemporaryFile(base64Decode(outfit.imgB64), outfit.id);
 
+    try {
+      final Reference storageRef = _storage.ref().child('outfits/${userId}/${outfit.id}.jpg');
+      final UploadTask uploadTask = storageRef.putFile(imageFile);
+      final TaskSnapshot snapshot = await uploadTask;
+      final String downloadUrl = await snapshot.ref.getDownloadURL();
+
+      outfit.urlImage = downloadUrl;
+
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        List<dynamic> favorites = userData['favoritesOutfits'] ?? [];
+        favorites.add(outfit.toMapSave());
+        await _firestore.collection('users').doc(userId).update({
+          'favoritesOutfits': favorites,
+        });
+      }
+
+      return true;
+    } on FirebaseException catch (e) {
+      print('Error al cargar la imagen: $e');
+      return false;
+    } catch (e) {
+      print('Error desconocido al cargar la imagen: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteOutfitImage(String id) async {
+    Account account = await getUserLoggedIn();
+    String userId = account.id;
+
+    try {
+      final Reference storageRef = _storage.ref().child('outfits/${userId}/$id.jpg');
+      await storageRef.delete();
+
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        List<dynamic> favorites = userData['favoritesOutfits'] ?? [];
+        favorites.removeWhere((element) => element['id'] == id);
+        await _firestore.collection('users').doc(userId).update({
+          'favoritesOutfits': favorites,
+        });
+      }
+
+      return true;
+    } on FirebaseException catch (e) {
+      print('Error al eliminar la imagen: $e');
+      return false;
+    } catch (e) {
+      print('Error desconocido al eliminar la imagen: $e');
+      return false;
+    }
+  }
+
+  Future<List<OutfitResponse>> getAllOutfitsSaved() async {
+    Account account = await getUserLoggedIn();
+    String userId = account.id;
+
+    try {
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        List<dynamic> favorites = userData['favoritesOutfits'] ?? [];
+        List<OutfitResponse> outfits = [];
+        for (var outfit in favorites) {
+          outfits.add(OutfitResponse.fromMap(outfit));
+        }
+        return outfits;
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
+  // cloths images
+  Future<bool> uploadClothImage(File? image, ClothInformation cloth) async {
+    Account account = await getUserLoggedIn();
+    String userId = account.id;
+
+    cloth.id = getFormattedCurrentDateTime();
+
+    try {
+      final Reference storageRef = _storage.ref().child('cloths/${userId}/${cloth.id}.jpg');
+      final UploadTask uploadTask = storageRef.putFile(image!);
+      final TaskSnapshot snapshot = await uploadTask;
+      final String downloadUrl = await snapshot.ref.getDownloadURL();
+
+      cloth.urlImage = downloadUrl;
+
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        List<dynamic> cloths = userData['cloths'] ?? [];
+        cloths.add(cloth.toMap());
+        await _firestore.collection('users').doc(userId).update({
+          'cloths': cloths,
+        });
+      }
+
+      return true;
+    } on FirebaseException catch (e) {
+      print('Error al cargar la imagen: $e');
+      return false;
+    } catch (e) {
+      print('Error desconocido al cargar la imagen: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteClothImage(String id) async {
+    Account account = await getUserLoggedIn();
+    String userId = account.id;
+
+    try {
+      final Reference storageRef = _storage.ref().child('cloths/${userId}/$id.jpg');
+      await storageRef.delete();
+
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        List<dynamic> cloths = userData['cloths'] ?? [];
+        cloths.removeWhere((element) => element['id'] == id);
+        await _firestore.collection('users').doc(userId).update({
+          'cloths': cloths,
+        });
+      }
+
+      return true;
+    } on FirebaseException catch (e) {
+      print('Error al eliminar la imagen: $e');
+      return false;
+    } catch (e) {
+      print('Error desconocido al eliminar la imagen: $e');
+      return false;
+    }
+  }
+
+  Future<List<ClothInformation>> getAllClothsSaved() async {
+    Account account = await getUserLoggedIn();
+    String userId = account.id;
+
+    try {
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        List<dynamic> favorites = userData['favoritesCloths'] ?? [];
+        List<ClothInformation> cloths = [];
+        for (var cloth in favorites) {
+          cloths.add(ClothInformation.fromMap(cloth));
+        }
+        return cloths;
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
 }

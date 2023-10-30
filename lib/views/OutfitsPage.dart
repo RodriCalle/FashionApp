@@ -1,12 +1,13 @@
 import 'dart:convert';
 
+import 'package:demo_fashion_app/classes/outfit_response.dart';
 import 'package:demo_fashion_app/styles/ColorStyles.dart';
 import 'package:flutter/material.dart';
 
-import '../classes/cloth_info.dart';
+import '../services/firebase_service.dart';
 
 class OutfitsPage extends StatefulWidget {
-  final List<ClothInformation> listClothInformation;
+  final List<OutfitResponse> listClothInformation;
   const OutfitsPage({Key? key, required this.listClothInformation}) : super(key: key);
 
   @override
@@ -15,28 +16,25 @@ class OutfitsPage extends StatefulWidget {
 
 class _OutfitsPageState extends State<OutfitsPage> {
 
-  List<ClothInformation> clothList = [
-    // polo negro
-    /*ClothInformation(name: 'Outfit 1', image: 'https://versach.pe/wp-content/uploads/2023/04/VRS_-_MODELO_FLORIAN-016-600x900.png'),
-    ClothInformation(name: 'Outfit 2', image: 'https://dg4uqybrelzrk.cloudfront.net/drago.pe/image/100007184/100007184-2.png'),
-    ClothInformation(name: 'Outfit 3', image: 'https://i.pinimg.com/564x/50/32/8b/50328b893d8f0a8d073c4c67d91ce181.jpg'),
-    ClothInformation(name: 'Outfit 4', image: 'https://i0.wp.com/deuniformes.es/wp-content/uploads/2020/07/852600-001-delante.jpg?fit=2048%2C2048&ssl=1'),
-    ClothInformation(name: 'Outfit 5', image: 'https://i.pinimg.com/564x/12/5e/6d/125e6d9dc03cbcf29121f88653fa4e59.jpg'),
-    ClothInformation(name: 'Outfit 6', image: 'https://www.octodenim.com/1215-large_default/polo-cuello-daniel-negro.jpg'),*/
 
-    // polo azul basico
-   /* ClothInformation(name: 'Outfit 1', image: 'https://falabella.scene7.com/is/image/FalabellaPE/19915218_4?wid=800&hei=800&qlt=70'),
-    ClothInformation(name: 'Outfit 2', image: 'https://falabella.scene7.com/is/image/FalabellaPE/882839951_4?wid=800&hei=800&qlt=70'),
-    ClothInformation(name: 'Outfit 3', image: 'https://falabella.scene7.com/is/image/FalabellaPE/19938407_3?wid=800&hei=800&qlt=70'),
-    ClothInformation(name: 'Outfit 4', image: 'https://falabella.scene7.com/is/image/FalabellaPE/19813217_4?wid=800&hei=800&qlt=70'),
-    ClothInformation(name: 'Outfit 5', image: 'https://falabella.scene7.com/is/image/FalabellaPE/19802607_4?wid=800&hei=800&qlt=70'),*/
-
-    // jogger plomo
-    ClothInformation(name: 'Outfit 1', imgUrl: 'https://home.ripley.com.pe/Attachment/WOP_5/2016288919451/2016288919451-4.jpg'),
-    ClothInformation(name: 'Outfit 2', imgUrl: 'https://falabella.scene7.com/is/image/FalabellaPE/882836575_4?wid=1004&hei=1500&crop=248,0,1004,1500&qlt=70'),
-    ClothInformation(name: 'Outfit 3', imgUrl: 'https://falabella.scene7.com/is/image/FalabellaPE/882834407_1?wid=1004&hei=1500&crop=248,0,1004,1500&qlt=70'),
-    ClothInformation(name: 'Outfit 4', imgUrl: "https://images.asos-media.com/products/joggers-de-polar-de-umbro/7763372-4?\$n_320w\$&wid=317&fit=constrain"),
-  ];
+  void favoriteImageOutfit(OutfitResponse outfit) async {
+    if (outfit.favorite) {
+      var response = await FirebaseService().deleteOutfitImage(outfit.id);
+      if (response) {
+        setState(() {
+          outfit.favorite = false;
+        });
+      }
+    }
+    else {
+      var response = await FirebaseService().uploadOutfitImage(outfit);
+      if (response) {
+        setState(() {
+          outfit.favorite = true;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,28 +46,28 @@ class _OutfitsPageState extends State<OutfitsPage> {
         return Column(
           children: [
             Container(
-              padding: EdgeInsets.all(25),
-              child: TextField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: grey,
-                  // border: border,
-                  // focusedBorder: border,
-                  hintText: "Buscar",
-                  suffixIcon: Icon(Icons.search, color: Colors.black),
-                ),
-              ),
+              padding: EdgeInsets.all(15),
+              // child: TextField(
+              //   keyboardType: TextInputType.text,
+              //   decoration: InputDecoration(
+              //     filled: true,
+              //     fillColor: grey,
+              //     // border: border,
+              //     // focusedBorder: border,
+              //     hintText: "Buscar",
+              //     suffixIcon: Icon(Icons.search, color: Colors.black),
+              //   ),
+              // ),
             ),
             Expanded(
               child: ListView.builder(
                 itemCount: widget.listClothInformation.length,
                 itemBuilder: (context, index) {
-                  ClothInformation clothInfo = widget.listClothInformation[index];
+                  OutfitResponse outfit = widget.listClothInformation[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
                     child: Container(
-                      height: bodyHeight * 0.23,
+                      height: bodyHeight * 0.30,
                       decoration: BoxDecoration(
                         color: grey,
                         borderRadius: BorderRadius.circular(10)
@@ -77,50 +75,54 @@ class _OutfitsPageState extends State<OutfitsPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Image.network(
-                              //   clothInfo.imgUrl,
-                              //   height: 130,
-                              // ),
-                              Image.memory(base64Decode(clothInfo.imgB64), height: 130,),
-                            ],
+                          Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // Image.network(
+                                //   clothInfo.imgUrl,
+                                //   height: 130,
+                                // ),
+                                Image.memory(base64Decode(outfit.imgB64), fit: BoxFit.cover, height: 130),
+                              ],
+                            ),
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-
-                              Container(
-                                width: 150,
-                                alignment: Alignment.topRight,
-                                child: IconButton(
-                                  icon: Icon(Icons.favorite_border),
-                                  iconSize: 25,
-                                  onPressed: () {  },
+                          Container(
+                            width: 200,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  alignment: Alignment.topRight,
+                                  child: IconButton(
+                                    icon: outfit.favorite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+                                    iconSize: 25,
+                                    onPressed: () { favoriteImageOutfit(outfit); },
+                                  ),
                                 ),
-                              ),
 
-                              Text(
-                                clothInfo.name,
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
+                                Text(
+                                  outfit.name,
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
 
-                              MaterialButton(
-                                  color: Color.fromRGBO(249, 235, 219, 1),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      side: BorderSide.none),
-                                  child: const Text("Ver",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18)),
-                                  onPressed: () {}
-                              ),
-                            ],
-                          ),
+                                MaterialButton(
+                                    color: Color.fromRGBO(249, 235, 219, 1),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                        side: BorderSide.none),
+                                    child: const Text("Ver",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16)),
+                                    onPressed: () {}
+                                ),
+                              ],
+                            ),
+                          )
 
                           /*Column(
                             children: [

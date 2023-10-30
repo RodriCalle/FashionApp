@@ -1,16 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:colornames/colornames.dart';
-import 'package:demo_fashion_app/classes/cloth_info.dart';
 import 'package:demo_fashion_app/classes/cloth_request.dart';
+import 'package:demo_fashion_app/classes/outfit_response.dart';
 import 'package:http/http.dart' as http;
-import '../classes/ClothInfoDetail.dart';
+import '../classes/cloth_information.dart';
 import 'package:image/image.dart' as img;
 
 var url_base = 'http://159.89.95.94:8888/';
 
-Future<ClothInfoDetail> getClothInfo(File? image) async {
-  ClothInfoDetail clothInfoDetail = ClothInfoDetail();
+Map<String, String> headers = {
+  'Content-Type': 'application/json',
+};
+
+Future<ClothInformation> getClothInfo(File? image) async {
+  ClothInformation clothInfoDetail = ClothInformation();
 
   final url = Uri.parse(url_base + 'predict');
   final request = http.MultipartRequest('POST', url);
@@ -43,25 +47,27 @@ Future<ClothInfoDetail> getClothInfo(File? image) async {
   return clothInfoDetail;
 }
 
-Future<List<ClothInformation>> getOutfits(ClothRequest request) async {
+Future<List<OutfitResponse>> getOutfits(ClothRequest request) async {
   final url = Uri.parse(url_base + 'closet');
-  final response = await http.post(url, body: jsonEncode(request));
+  final response = await http.post(url, headers: headers, body: jsonEncode(request));
 
-  var outfits = List<ClothInformation>.empty(growable: true);
+  var outfits = List<OutfitResponse>.empty(growable: true);
 
   if (response.statusCode == 200) {
     var rptaJson = json.decode(response.body);
 
-    print(rptaJson);
+    // print(rptaJson);
 
     for (var outfit in rptaJson['outfits']) {
-      var clothInfo = ClothInformation();
+      var clothInfo = OutfitResponse();
+      clothInfo.id = outfit['id'];
       clothInfo.name = outfit['name'];
       clothInfo.imgB64 = outfit['image'];
       outfits.add(clothInfo);
     }
 
   } else {
+    // print(response.body);
     print('Error al obtener conjuntos. Código de estado: ${response.statusCode}');
   }
 

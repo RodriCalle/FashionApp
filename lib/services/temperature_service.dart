@@ -27,11 +27,11 @@ class TemperatureService {
       await Geolocator.requestPermission();
       await getTemperature();
     } else {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      final Uri uri = Uri.parse(
-          '$baseUrl&lat=${position.latitude.toString()}&lon=${position.longitude.toString()}&key=$apiKey');
-      print(uri.toString());
+      // Position position = await Geolocator.getCurrentPosition(
+      //     desiredAccuracy: LocationAccuracy.high);
+      // final Uri uri = Uri.parse(
+      //     '$baseUrl&lat=${position.latitude.toString()}&lon=${position.longitude.toString()}&key=$apiKey');
+      // print(uri.toString());
       // try {
       //   final response = await http.get(uri);
       //
@@ -48,6 +48,7 @@ class TemperatureService {
       //   throw Exception('Error: $e');
       // }
     }
-    return temp;
+    // return temp;
+    return "23.3";
   }
 }

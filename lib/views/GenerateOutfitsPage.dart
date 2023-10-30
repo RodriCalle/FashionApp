@@ -1,19 +1,21 @@
 import 'dart:io';
 
-import 'package:demo_fashion_app/classes/ClothInfoDetail.dart';
+import 'package:demo_fashion_app/classes/cloth_information.dart';
 import 'package:demo_fashion_app/classes/cloth_request.dart';
+import 'package:demo_fashion_app/classes/outfit_response.dart';
 import 'package:demo_fashion_app/styles/ColorStyles.dart';
+import 'package:demo_fashion_app/utils/shared_preferences_utils.dart';
 import 'package:flutter/material.dart';
 
-import '../classes/cloth_info.dart';
+import '../services/firebase_service.dart';
 import '../services/outfit_service.dart';
 
 class GenerateOutfitsPage extends StatefulWidget {
   final File? image;
   final ValueChanged<int> onSubStepChanged;
   final ValueChanged<File> onImageSelected;
-  final ValueChanged<List<ClothInformation>> onListClothInformation;
-  final ClothInfoDetail clothInfoDetail;
+  final ValueChanged<List<OutfitResponse>> onListClothInformation;
+  final ClothInformation clothInfoDetail;
 
   GenerateOutfitsPage(
       {Key? key, this.image, required this.onSubStepChanged, required this.onImageSelected, required this.onListClothInformation,
@@ -25,25 +27,52 @@ class GenerateOutfitsPage extends StatefulWidget {
 }
 
 class _GenerateOutfitsPageState extends State<GenerateOutfitsPage> {
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
   }
 
+  void favoriteImageCloth(ClothInformation cloth) async {
+    if (cloth.favorite) {
+      var response = await FirebaseService().deleteClothImage(cloth.id);
+      if (response) {
+        setState(() {
+          cloth.favorite = false;
+        });
+      }
+    } else {
+      var response = await FirebaseService().uploadClothImage(widget.image, cloth);
+      if (response) {
+        setState(() {
+          cloth.favorite = true;
+        });
+      }
+    }
+  }
+
   void generateOutfits() async {
+    setState(() {
+      isLoading = true;
+    });
+
     ClothRequest request = ClothRequest();
     request.type = widget.clothInfoDetail.type;
     request.color = widget.clothInfoDetail.color;
     request.style = widget.clothInfoDetail.style;
-
-    request.temperature = widget.clothInfoDetail.season;
-    request.sex = 'Man';
+    request.season = widget.clothInfoDetail.season;
+    request.temperature = await getTemperature();
+    request.sex = (await FirebaseService().getUserInfo()).sex;
 
     var outfits = await getOutfits(request);
-    widget.onListClothInformation(outfits);
 
+    widget.onListClothInformation(outfits);
     widget.onSubStepChanged(3);
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -52,7 +81,7 @@ class _GenerateOutfitsPageState extends State<GenerateOutfitsPage> {
       double bodyHeight = constraints.maxHeight;
       double bodyWidth = constraints.maxWidth;
 
-      return Row(
+      return !isLoading ? Row(
         children: [
           Container(
               width: bodyWidth,
@@ -155,6 +184,8 @@ class _GenerateOutfitsPageState extends State<GenerateOutfitsPage> {
                 ),
               )),
         ],
+      ) : const Center(
+        child: CircularProgressIndicator(color: Colors.black,),
       );
     });
   }

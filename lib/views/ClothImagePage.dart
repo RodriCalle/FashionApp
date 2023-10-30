@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:demo_fashion_app/classes/ClothInfoDetail.dart';
+import 'package:demo_fashion_app/classes/cloth_information.dart';
 import 'package:demo_fashion_app/services/outfit_service.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class ClothImagePage extends StatefulWidget {
   final File? image;
   final ValueChanged<int> onSubStepChanged;
   final ValueChanged<File> onImageSelected;
-  final ValueChanged<ClothInfoDetail> onClothInfoDetail;
+  final ValueChanged<ClothInformation> onClothInfoDetail;
 
   ClothImagePage({Key? key, this.image,
     required this.onSubStepChanged, required this.onImageSelected, required this.onClothInfoDetail})
@@ -28,7 +28,7 @@ class _ClothImagePageState extends State<ClothImagePage> {
     });
 
     //final imgEnhanced = await processImageWithESRGAN(imageTemp);
-    ClothInfoDetail clothInfoDetail = ClothInfoDetail();
+    ClothInformation clothInfoDetail = ClothInformation();
     clothInfoDetail = await getClothInfo(widget.image);
 
     widget.onImageSelected(widget.image!);
@@ -110,7 +110,7 @@ class _ClothImagePageState extends State<ClothImagePage> {
               )),
         ],
       ) : const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(color: Colors.black),
       );
     });
   }

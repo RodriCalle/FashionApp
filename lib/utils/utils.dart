@@ -73,7 +73,6 @@ Future<String> saveBytesImageToFile(Uint8List bytes) async {
   return filePath;
 }
 
-// saveBytesToPhone
 Future<String> saveBytesToPhone(Uint8List bytes) async {
 
   final directory = await getExternalStorageDirectory();
@@ -90,7 +89,6 @@ Future<String> saveBytesToPhone(Uint8List bytes) async {
   return filePath;
 }
 
-//save txt and return path
 Future<String> saveTxt(String txt, [String? name]) async {
   final directory = await getExternalStorageDirectory();
   final now = DateTime.now();
@@ -104,4 +102,25 @@ Future<String> saveTxt(String txt, [String? name]) async {
   }
 
   return filePath;
+}
+
+//save uint8list to file temporary
+Future<File> saveBytesImageToTemporaryFile(Uint8List bytes, String fileName) async {
+  try {
+    final appDir = await getTemporaryDirectory();
+    final file = File('${appDir.path}/$fileName');
+
+    await file.writeAsBytes(bytes);
+
+    return file;
+  } catch (e) {
+    throw Exception('Error al guardar la imagen: $e');
+  }
+}
+
+String getFormattedCurrentDateTime() {
+  final now = DateTime.now();
+  final formattedDate = "${now.year}-${now.month}-${now.day}";
+  final formattedTime = "${now.hour}-${now.minute}-${now.second}";
+  return "$formattedDate-$formattedTime";
 }

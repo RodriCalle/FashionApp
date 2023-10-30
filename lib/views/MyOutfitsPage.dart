@@ -1,7 +1,8 @@
+import 'package:demo_fashion_app/classes/outfit_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-import '../classes/cloth_info.dart';
+import '../services/firebase_service.dart';
 
 class MyOutfitsPage extends StatefulWidget {
   final ValueChanged<int> onSubStepChanged;
@@ -12,33 +13,45 @@ class MyOutfitsPage extends StatefulWidget {
 }
 
 class _MyOutfitsPageState extends State<MyOutfitsPage> {
-  List<ClothInformation> clothList = [
-    ClothInformation(
-        name: 'Conjunto 1',
-        imgUrl:
-            'https://thumbs.dreamstime.com/b/joven-en-traje-de-mezclilla-guapo-hombre-con-chaqueta-y-jeans-sobre-fondo-blanco-foto-para-publicidad-mens-los-hombres-chaquetas-207855357.jpg'),
-    ClothInformation(
-        name: 'Conjunto 2',
-        imgUrl:
-            'https://hmperu.vtexassets.com/arquivos/ids/3289579-483-725/Loose-Jeans---Denim-blue---H-M-PE.jpg?v=638080789991570000'),
-    ClothInformation(
-        name: 'Conjunto 3',
-        imgUrl:
-            'https://http2.mlstatic.com/D_NQ_NP_702623-MLC49365086260_032022-O.webp'),
-    ClothInformation(
-        name: 'Conjunto 4',
-        imgUrl:
-            'https://hmperu.vtexassets.com/arquivos/ids/3787717-483-725/Regular-Tapered-Jeans---Negro-No-fade-black---H-M-PE.jpg?v=638265670132530000'),
-  ];
+  List<OutfitResponse> outfits = [];
+
+  void favoriteImageOutfit(OutfitResponse outfit) async {
+    if (outfit.favorite) {
+      var response = await FirebaseService().deleteOutfitImage(outfit.id);
+      if (response) {
+        outfits.remove(outfit);
+        setState(() {});
+      }
+    }
+    else {
+      var response = await FirebaseService().uploadOutfitImage(outfit);
+      if (response) {
+        setState(() {
+          outfit.favorite = true;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initialLoad();
+  }
+
+  void _initialLoad() async {
+    outfits = await FirebaseService().getAllOutfitsSaved();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      return MasonryGridView.count(
+      return outfits.length > 0 ? MasonryGridView.count(
         crossAxisCount: 2,
-        itemCount: clothList.length,
+        itemCount: outfits.length,
         itemBuilder: (context, index) {
-          ClothInformation clientOutfitInfo = clothList[index];
+          OutfitResponse outfit = outfits[index];
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +64,7 @@ class _MyOutfitsPageState extends State<MyOutfitsPage> {
                         padding:
                             const EdgeInsets.only(top: 18, left: 12, right: 18),
                         child: Image.network(
-                          clientOutfitInfo.imgUrl,
+                          outfit.urlImage,
                           height: 135,
                           width: 130,
                           fit: BoxFit.cover,
@@ -62,28 +75,26 @@ class _MyOutfitsPageState extends State<MyOutfitsPage> {
                         right: -9,
                         // left: -23,
                         child: IconButton(
-                          onPressed: () {
-                            {}
-                          },
-                          icon: const Icon(Icons.favorite),
+                          onPressed: () { favoriteImageOutfit(outfit); },
+                          icon: outfit.favorite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
                           iconSize: 36,
                         ),
                       )
                     ],
                   ),
-                  MaterialButton(
-                      color: const Color.fromRGBO(249, 235, 219, 1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          side: BorderSide.none),
-                      child: const Text("Ver",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14)),
-                      onPressed: () {
-                        // widget.onSubStepChanged(1);
-                      }),
+                  // MaterialButton(
+                  //     color: const Color.fromRGBO(249, 235, 219, 1),
+                  //     shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(30),
+                  //         side: BorderSide.none),
+                  //     child: const Text("Ver",
+                  //         style: TextStyle(
+                  //             color: Colors.black,
+                  //             fontWeight: FontWeight.bold,
+                  //             fontSize: 14)),
+                  //     onPressed: () {
+                  //       // widget.onSubStepChanged(1);
+                  //     }),
                   const SizedBox(
                     height: 15,
                   )
@@ -92,6 +103,11 @@ class _MyOutfitsPageState extends State<MyOutfitsPage> {
             ],
           );
         },
+      ) : Container(
+        child: Text("No hay conjuntos guardados",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        alignment: Alignment.center,
       );
     });
   }

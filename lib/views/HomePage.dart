@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../utils/shared_preferences_utils.dart';
+
 class HomePage extends StatefulWidget {
   final ValueChanged<int> onSubStepChanged;
   final ValueChanged<File> onImageSelected;
@@ -19,7 +21,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late File image;
   Account loggedInUser = Account();
-  String temperature = "0";
+  double temperature = 0.0;
 
   @override
   void initState() {
@@ -29,7 +31,9 @@ class _HomePageState extends State<HomePage> {
 
   void _initialLoad() async {
     final user = await FirebaseService().getUserInfo();
-    final temp = await TemperatureService().getTemperature();
+    final temp = double.parse(await TemperatureService().getTemperature());
+
+    await saveTemperature(temp.toString());
     setState(() {
       loggedInUser = user;
       temperature = temp;
@@ -38,15 +42,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   IconData getIconFromTemperature() {
-    if(double.parse(temperature) < -5)
+    if(temperature < -5.0)
       return Icons.ac_unit;
-    else if(double.parse(temperature) >= -5 && int.parse(temperature) < 10)
+    else if(temperature >= -5.0 && temperature < 10.0)
       return Icons.cloud;
-    else if(double.parse(temperature) >= 10 && int.parse(temperature) < 20)
+    else if(temperature >= 10.0 && temperature < 20.0)
       return Icons.cloud_queue;
-    else if(double.parse(temperature) >= 20 && int.parse(temperature) < 30)
+    else if(temperature >= 20.0 && temperature < 30.0)
       return Icons.sunny;
-    else if(double.parse(temperature) >= 30)
+    else if(temperature >= 30.0)
       return Icons.whatshot;
 
     return Icons.sunny;
@@ -122,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "la temperatura de hoy es de ${temperature}° C",
+                              "la temperatura de hoy es de $temperature° C",
                               style: TextStyle(fontSize: 20),
                             ),
                           ],
