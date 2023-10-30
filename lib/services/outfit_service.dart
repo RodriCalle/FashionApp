@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:colornames/colornames.dart';
+import 'package:demo_fashion_app/classes/cloth_info.dart';
 import 'package:demo_fashion_app/classes/cloth_request.dart';
 import 'package:http/http.dart' as http;
 import '../classes/ClothInfoDetail.dart';
@@ -42,16 +43,29 @@ Future<ClothInfoDetail> getClothInfo(File? image) async {
   return clothInfoDetail;
 }
 
-Future<void> getOutfits(ClothRequest request) async {
+Future<List<ClothInformation>> getOutfits(ClothRequest request) async {
   final url = Uri.parse(url_base + 'closet');
   final response = await http.post(url, body: jsonEncode(request));
 
+  var outfits = List<ClothInformation>.empty(growable: true);
+
   if (response.statusCode == 200) {
     var rptaJson = json.decode(response.body);
+
     print(rptaJson);
+
+    for (var outfit in rptaJson['outfits']) {
+      var clothInfo = ClothInformation();
+      clothInfo.name = outfit['name'];
+      clothInfo.imgB64 = outfit['image'];
+      outfits.add(clothInfo);
+    }
+
   } else {
     print('Error al obtener conjuntos. Código de estado: ${response.statusCode}');
   }
+
+  return outfits;
 }
 
 

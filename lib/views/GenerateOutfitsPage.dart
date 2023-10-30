@@ -1,17 +1,23 @@
 import 'dart:io';
 
 import 'package:demo_fashion_app/classes/ClothInfoDetail.dart';
+import 'package:demo_fashion_app/classes/cloth_request.dart';
 import 'package:demo_fashion_app/styles/ColorStyles.dart';
 import 'package:flutter/material.dart';
+
+import '../classes/cloth_info.dart';
+import '../services/outfit_service.dart';
 
 class GenerateOutfitsPage extends StatefulWidget {
   final File? image;
   final ValueChanged<int> onSubStepChanged;
   final ValueChanged<File> onImageSelected;
-  final ClothInfoDetail? clothInfoDetail;
+  final ValueChanged<List<ClothInformation>> onListClothInformation;
+  final ClothInfoDetail clothInfoDetail;
 
   GenerateOutfitsPage(
-      {Key? key, this.image, required this.onSubStepChanged, required this.onImageSelected, this.clothInfoDetail})
+      {Key? key, this.image, required this.onSubStepChanged, required this.onImageSelected, required this.onListClothInformation,
+        required this.clothInfoDetail})
       : super(key: key);
 
   @override
@@ -26,6 +32,17 @@ class _GenerateOutfitsPageState extends State<GenerateOutfitsPage> {
   }
 
   void generateOutfits() async {
+    ClothRequest request = ClothRequest();
+    request.type = widget.clothInfoDetail.type;
+    request.color = widget.clothInfoDetail.color;
+    request.style = widget.clothInfoDetail.style;
+
+    request.temperature = widget.clothInfoDetail.season;
+    request.sex = 'Man';
+
+    var outfits = await getOutfits(request);
+    widget.onListClothInformation(outfits);
+
     widget.onSubStepChanged(3);
   }
 

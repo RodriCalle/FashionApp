@@ -25,7 +25,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -44,39 +47,28 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBEXazGbetxUeWRVKB3m40qRhwijDQ9Lhg',
-    appId: '1:405314841033:web:54baa51bab081c209a6018',
-    messagingSenderId: '405314841033',
-    projectId: 'fashionapp-17e0b',
-    authDomain: 'fashionapp-17e0b.firebaseapp.com',
-    storageBucket: 'fashionapp-17e0b.appspot.com',
+    apiKey: 'AIzaSyC4Zd-o32S6i5BlLUjnrKjWqxeIuczFmnc',
+    appId: '1:441547778366:web:e08e2e1e0935cde0a1e46f',
+    messagingSenderId: '441547778366',
+    projectId: 'fashion-app-final',
+    authDomain: 'fashion-app-final.firebaseapp.com',
+    storageBucket: 'fashion-app-final.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA4wfzk1vkZhnjDJT9QPWpvmmelGVYO9yo',
-    appId: '1:405314841033:android:9552f037649c7e579a6018',
-    messagingSenderId: '405314841033',
-    projectId: 'fashionapp-17e0b',
-    storageBucket: 'fashionapp-17e0b.appspot.com',
+    apiKey: 'AIzaSyAFJYZI8agQZtyslTXGxHJLcTK8iyLoFwM',
+    appId: '1:441547778366:android:ecb1256b05640cb9a1e46f',
+    messagingSenderId: '441547778366',
+    projectId: 'fashion-app-final',
+    storageBucket: 'fashion-app-final.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDdk6rtm8FzJ89DmvpYXm1_tod8e6ZlCh8',
-    appId: '1:405314841033:ios:539cf4ebab5062819a6018',
-    messagingSenderId: '405314841033',
-    projectId: 'fashionapp-17e0b',
-    storageBucket: 'fashionapp-17e0b.appspot.com',
-    iosClientId: '405314841033-6j0gfro0j7udba3jg7eh666faods3hcn.apps.googleusercontent.com',
-    iosBundleId: 'com.example.demoFashionApp',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDdk6rtm8FzJ89DmvpYXm1_tod8e6ZlCh8',
-    appId: '1:405314841033:ios:539cf4ebab5062819a6018',
-    messagingSenderId: '405314841033',
-    projectId: 'fashionapp-17e0b',
-    storageBucket: 'fashionapp-17e0b.appspot.com',
-    iosClientId: '405314841033-6j0gfro0j7udba3jg7eh666faods3hcn.apps.googleusercontent.com',
+    apiKey: 'AIzaSyB1Ew7ES4OhKv0Dkt9edJhLECAFzfJATCY',
+    appId: '1:441547778366:ios:c24a6b4aa224747fa1e46f',
+    messagingSenderId: '441547778366',
+    projectId: 'fashion-app-final',
+    storageBucket: 'fashion-app-final.appspot.com',
     iosBundleId: 'com.example.demoFashionApp',
   );
 }

@@ -1,7 +1,7 @@
 class ClothInformation {
   // datos de un conjunto
   String name;
-  List<String> imagesUrls = [];
+  String imgB64;
 
   // datos de una prenda
   String imgUrl;
@@ -12,7 +12,7 @@ class ClothInformation {
 
   ClothInformation({
     this.name = "",
-    this.imagesUrls = const [],
+    this.imgB64 = "",
 
     this.imgUrl = "",
     this.type = "",

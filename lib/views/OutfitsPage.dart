@@ -1,16 +1,20 @@
+import 'dart:convert';
+
 import 'package:demo_fashion_app/styles/ColorStyles.dart';
 import 'package:flutter/material.dart';
 
 import '../classes/cloth_info.dart';
 
 class OutfitsPage extends StatefulWidget {
-  const OutfitsPage({Key? key}) : super(key: key);
+  final List<ClothInformation> listClothInformation;
+  const OutfitsPage({Key? key, required this.listClothInformation}) : super(key: key);
 
   @override
   State<OutfitsPage> createState() => _OutfitsPageState();
 }
 
 class _OutfitsPageState extends State<OutfitsPage> {
+
   List<ClothInformation> clothList = [
     // polo negro
     /*ClothInformation(name: 'Outfit 1', image: 'https://versach.pe/wp-content/uploads/2023/04/VRS_-_MODELO_FLORIAN-016-600x900.png'),
@@ -34,13 +38,6 @@ class _OutfitsPageState extends State<OutfitsPage> {
     ClothInformation(name: 'Outfit 4', imgUrl: "https://images.asos-media.com/products/joggers-de-polar-de-umbro/7763372-4?\$n_320w\$&wid=317&fit=constrain"),
   ];
 
-  OutlineInputBorder border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(
-          color: Colors.black
-      )
-  );
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -55,10 +52,10 @@ class _OutfitsPageState extends State<OutfitsPage> {
               child: TextField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  filled: true, // Set this to true to fill the background
-                  fillColor: grey, //
-                  border: border,
-                  focusedBorder: border,
+                  filled: true,
+                  fillColor: grey,
+                  // border: border,
+                  // focusedBorder: border,
                   hintText: "Buscar",
                   suffixIcon: Icon(Icons.search, color: Colors.black),
                 ),
@@ -66,9 +63,9 @@ class _OutfitsPageState extends State<OutfitsPage> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: clothList.length,
+                itemCount: widget.listClothInformation.length,
                 itemBuilder: (context, index) {
-                  ClothInformation clothInfo = clothList[index];
+                  ClothInformation clothInfo = widget.listClothInformation[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
                     child: Container(
@@ -83,10 +80,11 @@ class _OutfitsPageState extends State<OutfitsPage> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.network(
-                                clothInfo.imgUrl,
-                                height: 130,
-                              ),
+                              // Image.network(
+                              //   clothInfo.imgUrl,
+                              //   height: 130,
+                              // ),
+                              Image.memory(base64Decode(clothInfo.imgB64), height: 130,),
                             ],
                           ),
                           Column(

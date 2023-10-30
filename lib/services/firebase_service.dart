@@ -5,9 +5,7 @@ import 'package:demo_fashion_app/classes/auth.dart';
 import 'package:demo_fashion_app/utils/shared_preferences_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:io';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -38,6 +36,8 @@ class FirebaseService {
 
       print("saddsa ${prefs.getString('user_id')} ");*/
     } catch (e) {
+      print("errorrrrrrrrrrrriniciando");
+      print(e);
       throw e;
     }
   }
@@ -61,6 +61,8 @@ class FirebaseService {
         'photoUrl': "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg"
       });
     } catch (e) {
+      print("errorrrrrrrrrrrr");
+      print(e);
       throw e;
     }
   }

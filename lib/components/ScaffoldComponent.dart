@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:demo_fashion_app/classes/ClothInfoDetail.dart';
+import 'package:demo_fashion_app/classes/cloth_info.dart';
 import 'package:demo_fashion_app/components/AppBarComponent.dart';
 import 'package:demo_fashion_app/views/ClothImagePage.dart';
 import 'package:demo_fashion_app/views/GenerateOutfitsPage.dart';
@@ -14,8 +14,6 @@ import 'package:demo_fashion_app/views/ProfilePage.dart';
 import 'package:demo_fashion_app/views/SubscriptionPage.dart';
 import 'package:demo_fashion_app/utils/lists.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 
 class ScaffoldComponent extends StatefulWidget {
   const ScaffoldComponent({Key? key}) : super(key: key);
@@ -29,7 +27,8 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
   int _subStepIndex = 0;
   late String _appBarTitle = "Seleccionar Prenda";
   File? imageSelected;
-  ClothInfoDetail? clothInfoDetail;
+  ClothInfoDetail clothInfoDetail = ClothInfoDetail();
+  List<ClothInformation> listClothInformation = [];
 
   @override
   void initState() {
@@ -47,7 +46,7 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
   }
 
   void _onSubStepChanged(int index) {
-    print("index ${index}");
+    // print("index ${index}");
     setState(() {
       _subStepIndex = index;
       _appBarTitle = subTitles[_subStepIndex];
@@ -64,6 +63,12 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
   void _onClothInfoDetail(ClothInfoDetail clothInfoD) {
     setState(() {
       clothInfoDetail = clothInfoD;
+    });
+  }
+
+  void _onListClothInformation(List<ClothInformation> list) {
+    setState(() {
+      listClothInformation = list;
     });
   }
 
@@ -133,12 +138,15 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
               onClothInfoDetail: _onClothInfoDetail,
             ),
             GenerateOutfitsPage(
-                image: imageSelected,
-                onSubStepChanged: _onSubStepChanged,
-                onImageSelected: _onImageSelected,
-                clothInfoDetail: clothInfoDetail,
+              image: imageSelected,
+              onSubStepChanged: _onSubStepChanged,
+              onImageSelected: _onImageSelected,
+              onListClothInformation: _onListClothInformation,
+              clothInfoDetail: clothInfoDetail,
             ),
-            const OutfitsPage(),
+            OutfitsPage(
+              listClothInformation: listClothInformation,
+            ),
             Container(color: Colors.brown),
           ],
         );
@@ -151,6 +159,7 @@ class _ScaffoldComponentState extends State<ScaffoldComponent> {
                 image: imageSelected,
                 onSubStepChanged: _onSubStepChanged,
                 onImageSelected: _onImageSelected,
+                onListClothInformation: _onListClothInformation,
                 clothInfoDetail: clothInfoDetail,
             ),
           ],
