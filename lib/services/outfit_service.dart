@@ -32,6 +32,8 @@ Future<ClothInformation> getClothInfo(File? image) async {
     clothInfoDetail.season = rptaJson['season']['name'];
     clothInfoDetail.style = rptaJson['style']['name'];
 
+    print("El color es: ${rptaJson['colors']['palette'][0]}");
+
     for(int i = 0; i < 1; i++) {
       var r = rptaJson['colors']['palette'][i][0];
       var g = rptaJson['colors']['palette'][i][1];
