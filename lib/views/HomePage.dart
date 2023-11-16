@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late File image;
   Account loggedInUser = Account();
-  double temperature = 0.0;
+  double temperature = 22.0;
 
   @override
   void initState() {
@@ -31,14 +31,19 @@ class _HomePageState extends State<HomePage> {
 
   void _initialLoad() async {
     final user = await FirebaseService().getUserInfo();
-    final temp = double.parse(await TemperatureService().getTemperature());
+    if(user != null) {
+      setState(() {
+        loggedInUser = user;
+      });
+    }
 
-    await saveTemperature(temp.toString());
-    setState(() {
-      loggedInUser = user;
-      temperature = temp;
-    });
-    // print(loggedInUser.names);
+    final temp = double.parse(await TemperatureService().getTemperature());
+    if(temp != null) {
+      await saveTemperature(temp.toString());
+      setState(() {
+        temperature = temp;
+      });
+    }
   }
 
   IconData getIconFromTemperature() {
@@ -121,14 +126,15 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Text(
-                              loggedInUser.names + ",",
+                              loggedInUser.names + ".",
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            Text(
-                              "la temperatura de hoy es de $temperature° C",
-                              style: TextStyle(fontSize: 20),
-                            ),
+                            if (temperature != null)
+                              Text(
+                                "La temperatura es de $temperature° C",
+                                style: TextStyle(fontSize: 20),
+                              ),
                           ],
                         ),
                       ),

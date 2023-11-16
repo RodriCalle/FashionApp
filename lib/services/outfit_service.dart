@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:colornames/colornames.dart';
 import 'package:demo_fashion_app/classes/cloth_request.dart';
 import 'package:demo_fashion_app/classes/outfit_response.dart';
+import 'package:demo_fashion_app/services/color_service.dart';
 import 'package:http/http.dart' as http;
 import '../classes/cloth_information.dart';
-import 'package:image/image.dart' as img;
+// import 'package:image/image.dart' as img;
 
 var url_base = 'http://159.89.95.94:8888/';
 
@@ -38,9 +38,13 @@ Future<ClothInformation> getClothInfo(File? image) async {
       var r = rptaJson['colors']['palette'][i][0];
       var g = rptaJson['colors']['palette'][i][1];
       var b = rptaJson['colors']['palette'][i][2];
-      var color = img.Color.fromRgb(r, g, b);
+      // var color = img.Color.fromRgb(r, g, b);
 
-      clothInfoDetail.color = color.colorName;
+      var rgb = "${r},${g},${b})";
+      var color = await getColorName(rgb);
+
+      // clothInfoDetail.color = color.colorName;
+      clothInfoDetail.color = color;
     }
   } else {
     print('Error al enviar la imagen. Código de estado: ${response.statusCode}');
